@@ -342,6 +342,10 @@ void CSNWriterDlg::ParameterInit()
 
     SetUIItem();
 
+	//add by wzb 
+	HideSomeUIItem();
+	//end
+
 	//add by wzb for test config ini
 #if 1
 	CString strTempTestInfo;
@@ -370,6 +374,19 @@ void CSNWriterDlg::EnableStartBTN(bool bEnable)
 {
     (CWnd*)GetDlgItem(IDC_BTN_START)->EnableWindow(bEnable);
 }
+//add by wzb for hide some UI item
+void CSNWriterDlg::HideSomeUIItem()
+{
+	//CWnd *pWnd = AfxGetMainWnd();
+	//pWnd->SetMenu(NULL);
+	//pWnd->DrawMenuBar();
+	m_SNMenu.RemoveMenu(0,  MF_BYPOSITION);
+	m_SNMenu.RemoveMenu(0, MF_BYPOSITION);
+	m_SNMenu.RemoveMenu(0, MF_BYPOSITION);
+	m_SNMenu.RemoveMenu(0, MF_BYPOSITION);
+}
+
+//end
 
 void CSNWriterDlg::EnableUIItem()
 {
@@ -379,24 +396,29 @@ void CSNWriterDlg::EnableUIItem()
     {
         GetDlgItem(IDC_BTN_SYSCONFIG)->EnableWindow(TRUE);
         GetDlgItem(IDC_COMBO_TARGET_TYPE)->EnableWindow(TRUE);
-
+		//del by wzb for hide menu do not use
+		/*
         m_SNMenu.EnableMenuItem(0, MF_ENABLED | MF_BYPOSITION);
         m_SNMenu.EnableMenuItem(1, MF_ENABLED | MF_BYPOSITION);
         m_SNMenu.EnableMenuItem(2, MF_ENABLED | MF_BYPOSITION);
         m_SNMenu.EnableMenuItem(3, MF_ENABLED | MF_BYPOSITION);
         m_SNMenu.GetSubMenu(3)->EnableMenuItem(0, MF_ENABLED | MF_BYPOSITION);
         m_SNMenu.GetSubMenu(3)->EnableMenuItem(1, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
+		*/
     }
     else
     {
         GetDlgItem(IDC_BTN_SYSCONFIG)->EnableWindow(FALSE);
         GetDlgItem(IDC_COMBO_TARGET_TYPE)->EnableWindow(FALSE);
+		//del by wzb for hide menu do not use
+		/*
         m_SNMenu.EnableMenuItem(0, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
         m_SNMenu.EnableMenuItem(1, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
         m_SNMenu.EnableMenuItem(2, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
         m_SNMenu.EnableMenuItem(3, MF_ENABLED | MF_BYPOSITION);
         m_SNMenu.GetSubMenu(3)->EnableMenuItem(0, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
         m_SNMenu.GetSubMenu(3)->EnableMenuItem(1, MF_ENABLED | MF_BYPOSITION);
+		*/
     }
 
     SetDlgItemText(IDC_BTN_START, "Start");
@@ -408,12 +430,16 @@ void CSNWriterDlg::DisableUIItem()
     GetDlgItem(IDC_BTN_SYSCONFIG)->EnableWindow(FALSE);
     GetDlgItem(IDC_COMBO_TARGET_TYPE)->EnableWindow(FALSE);
     GetDlgItem(IDC_COMBO_COMPORT)->EnableWindow(FALSE);
+
+	//del by wzb for hide menu do not use
+	/*
     m_SNMenu.EnableMenuItem( 0, MF_GRAYED | MF_DISABLED | MF_BYPOSITION );
     m_SNMenu.EnableMenuItem( 1, MF_GRAYED | MF_DISABLED | MF_BYPOSITION );
     m_SNMenu.EnableMenuItem( 2, MF_GRAYED | MF_DISABLED | MF_BYPOSITION );
     m_SNMenu.EnableMenuItem(3, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
     m_SNMenu.GetSubMenu(3)->EnableMenuItem(0, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
     m_SNMenu.GetSubMenu(3)->EnableMenuItem(1, MF_GRAYED | MF_DISABLED | MF_BYPOSITION);
+	*/
 
     SetDlgItemText(IDC_BTN_START, "Stop");
 }
@@ -652,7 +678,8 @@ void CSNWriterDlg::OnSelchangeComboTargetType()
     else
     {
         g_sMetaComm.bSwithTool = false;
-        m_SNMenu.GetSubMenu(1)->CheckMenuItem(IDR_OPTION_SWITCHTOOL, MF_UNCHECKED | MF_BYCOMMAND);  // USB SwithTool
+		//del by wzb for hide menu,do not use menu
+       // m_SNMenu.GetSubMenu(1)->CheckMenuItem(IDR_OPTION_SWITCHTOOL, MF_UNCHECKED | MF_BYCOMMAND);  // USB SwithTool
     }
 
     if(g_sMetaComm.eTargetType == TABLET_WIFI_ONLY)
@@ -666,8 +693,9 @@ void CSNWriterDlg::OnSelchangeComboTargetType()
     }
     else
     {
-        m_SNMenu.GetSubMenu(2)->EnableMenuItem(IDR_OPTION_HDCP, MF_ENABLED | MF_BYCOMMAND);
-        m_SNMenu.GetSubMenu(2)->EnableMenuItem(IDR_OPTION_HDCPDATA, MF_ENABLED | MF_BYCOMMAND);
+        ////del by wzb for hide menu,do not use menu
+		//m_SNMenu.GetSubMenu(2)->EnableMenuItem(IDR_OPTION_HDCP, MF_ENABLED | MF_BYCOMMAND);
+        //m_SNMenu.GetSubMenu(2)->EnableMenuItem(IDR_OPTION_HDCPDATA, MF_ENABLED | MF_BYCOMMAND);
     }
 }
 

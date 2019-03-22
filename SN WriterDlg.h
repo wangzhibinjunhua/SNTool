@@ -108,6 +108,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
+	//add by wzb 
+	void HideSomeUIItem();
+	//end
     void ParameterInit();
     void MenuItemInit();
     void EnableUIItem();
