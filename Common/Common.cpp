@@ -743,15 +743,27 @@ int SelectSqlByType(int type)
 {
 	int iRet = 0;
 	CString strSRC;
+#if 1
 	strSRC = "Driver=SQL Server;Server=";
-	strSRC += g_sMetaComm.strDBSQLSrc;//"127.0.0.1,1433";
+	strSRC += g_sMetaComm.strDBSQLSrc;//"127.0.0.1";
+	strSRC += ",";
+	strSRC += g_sMetaComm.strDBPort;//1433
 	strSRC += ";Database=";
 	strSRC += g_sMetaComm.strDBName;//"DBTMTS";
 	strSRC += ";UID=";
 	strSRC += g_sMetaComm.strDBSQLUser;//"root"; 
-	strSRC += ";PWD =";
+	strSRC += ";PWD=";
 	strSRC += g_sMetaComm.strDBSQLPassword;//"123456";
-	AfxMessageBox(strSRC);
+#else
+	strSRC = "Driver=SQL Server;Server="; 
+	strSRC += "127.0.0.1,1433"; 
+	strSRC += ";Database="; 
+	strSRC += "DBTMTS";
+	strSRC += ";UID=root;PWD=123456";
+
+#endif
+	
+	//AfxMessageBox(strSRC);
 	CString strSQL = "";
 	switch (type)
 	{
@@ -790,12 +802,12 @@ int SelectSqlByType(int type)
 		if (!pRecordset->GetadoEOF())
 		{
 			iRet = SN_TPCONTROL_EXIST;
-			//AfxMessageBox("sn tpcontrol exist");
+			AfxMessageBox("sn tpcontrol exist");
 		}
 		else
 		{
 			iRet = SN_TPCONTROL_NONE;
-			//AfxMessageBox("sn tpcontrol none");
+			AfxMessageBox("sn tpcontrol none");
 		}
 		break;
 	case SELECT_TPINPUT:

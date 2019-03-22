@@ -680,8 +680,8 @@ void CSNWriterDlg::OnAboutSn()
 		OleEnvInit();
 		//UploadDataToSql();
 		SelectSqlByType(SELECT_TPCONTROL);
-		SelectSqlByType(SELECT_TPINPUT);
-		SelectSqlByType(SELECT_TPPLAN);
+		//SelectSqlByType(SELECT_TPINPUT);
+		//SelectSqlByType(SELECT_TPPLAN);
 		return;
 	}
 	//end
