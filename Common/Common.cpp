@@ -870,12 +870,14 @@ int UploadDataToSql()
 
 	CString strSRC;
 	strSRC = "Driver=SQL Server;Server=";
-	strSRC += g_sMetaComm.strDBSQLSrc;//"127.0.0.1,1433";
+	strSRC += g_sMetaComm.strDBSQLSrc;//"127.0.0.1";
+	strSRC += ",";
+	strSRC += g_sMetaComm.strDBPort;//1433
 	strSRC += ";Database=";
 	strSRC += g_sMetaComm.strDBName;//"DBTMTS";
 	strSRC += ";UID=";
 	strSRC += g_sMetaComm.strDBSQLUser;//"root"; 
-	strSRC += ";PWD =";
+	strSRC += ";PWD=";
 	strSRC += g_sMetaComm.strDBSQLPassword;//"123456";
 	CString strSQL = "INSERT INTO [DBTMTS].[dbo].[TpInput] ([SN], [IMEI1], [IMEI2], [MO], [PN], [InputTime], [Software], [ZPN]) VALUES ('3901A18423D00180', '868968030004432', '868968030465670', '', '2541254120', '2019-03-22 14:47:49.170', '', '');";
 
