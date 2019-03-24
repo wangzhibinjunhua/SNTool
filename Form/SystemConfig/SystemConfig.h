@@ -134,6 +134,7 @@ protected:
     void UpDateIMEIOption(BOOL bWriteIMEIEnable);
     void UpdateConfigUIOption();
     void EnableDBFileOption();
+	void HideSomeDlgItem();//add by wzb
 
 private:
     CShadeButtonST m_Load_MD1DB_BTN;

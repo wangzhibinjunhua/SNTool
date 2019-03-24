@@ -207,7 +207,8 @@ BOOL CSystemConfig::OnInitDialog()
     else
         ((CButton *)GetDlgItem(IDC_LOCK_OTP))->SetCheck(g_sMetaComm.sIMEIOption.bLockOtp ? BST_CHECKED : BST_UNCHECKED);
 
-    UpdateConfigUIOption();
+	HideSomeDlgItem();//wzb
+	UpdateConfigUIOption();
 
     // Tool Tip
     m_pToolTip = new CToolTipCtrl;
@@ -220,6 +221,49 @@ BOOL CSystemConfig::OnInitDialog()
     return TRUE;  // return TRUE unless you set the focus to a control
     // EXCEPTION: OCX Property Pages should return FALSE
 }
+
+//add by wzb
+void CSystemConfig::HideSomeDlgItem()
+{
+	GetDlgItem(IDC_WRITE_IMEI_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WRITE_BT_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WRITE_WIFI_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WRITE_ETHERNET_MAC_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WRITE_DRMKEY_MCID_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WRITE_MEID_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WRITE_ESN_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_CHECKSUM)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_LOCK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_DUAL_IMEI_SAME)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_DUAL_IMEI)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_THREE_IMEI)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_FOUR_IMEI)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_BARC_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_BARC_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_BT_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_BT_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WIFI_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WIFI_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_1_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_1_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_2_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_2_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_3_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_3_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_4_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_IMEI_4_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_SERIAL_NO_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_SERIAL_NO_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_ETHERNET_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_ETHERNET_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_DRMKEY_MCID_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_DRMKEY_MCID_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_MEID_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_MEID_HEADER_STR)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_ESN_HEADER_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_ESN_HEADER_STR)->ShowWindow(SW_HIDE);
+}
+//end
 
 BOOL CSystemConfig::PreTranslateMessage(MSG* pMsg)
 {
