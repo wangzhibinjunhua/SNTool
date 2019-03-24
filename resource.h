@@ -19,6 +19,7 @@
 #define IDB_BITMAP_LOGO                 148
 #define IDI_ICON1                       154
 #define IDD_ENCRYPTION_DIALOG           155
+#define IDD_SYSTEM_CONFIG_DIALOG1       156
 #define IDC_COUNT_TOTAL                 1000
 #define IDC_BTN_SYSCONFIG               1001
 #define IDC_BTN_START                   1002
@@ -256,7 +257,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        160
+#define _APS_NEXT_RESOURCE_VALUE        162
 #define _APS_NEXT_COMMAND_VALUE         32801
 #define _APS_NEXT_CONTROL_VALUE         1169
 #define _APS_NEXT_SYMED_VALUE           101

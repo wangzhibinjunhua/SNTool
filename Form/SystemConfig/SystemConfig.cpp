@@ -1,6 +1,5 @@
 // SystemConfig.cpp : implementation file
 //
-
 #include "stdafx.h"
 #include "SN Writer.h"
 #include "SN WriterDlg.h"

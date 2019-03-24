@@ -1,3 +1,4 @@
+
 #if !defined(AFX_SYSTEMCONFIG_H__0B5BBA83_CFA5_489F_9D8D_C92966F38DF0__INCLUDED_)
 #define AFX_SYSTEMCONFIG_H__0B5BBA83_CFA5_489F_9D8D_C92966F38DF0__INCLUDED_
 
@@ -21,7 +22,7 @@ public:
 
     // Dialog Data
     //{{AFX_DATA(CSystemConfig)
-    enum { IDD = IDD_SYSTEM_CONFIG_DIALOG };
+    enum { IDD = IDD_SYSTEM_CONFIG_DIALOG1 };
     //************C2K PARA START************//
     CString m_strMeidHD;
     CString m_strEsnHD;
