@@ -164,7 +164,7 @@ BOOL CSNWriterDlg::OnInitDialog()
     if (pSysMenu != NULL)
     {
         CString strAboutMenu;
-        strAboutMenu.LoadString(IDS_ABOUTBOX);
+        strAboutMenu.LoadString(IDS_ABOUTBOX); 
         if (!strAboutMenu.IsEmpty())
         {
             pSysMenu->AppendMenu(MF_SEPARATOR);
@@ -703,7 +703,7 @@ void CSNWriterDlg::OnAboutSn()
 {
     // TODO: Add your command handler code here
    //add by wzb for test
-	if (1)
+	if (0)
 	{
 		OleEnvInit();
 		//UploadDataToSql();

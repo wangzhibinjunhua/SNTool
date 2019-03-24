@@ -63,6 +63,12 @@ BOOL CAboutSNDlg::OnInitDialog()
     // MetaApp.dll Version, not used
     GetDlgItem(IDC_METAAPPDLL_VERSION)->SetWindowText(_T(""));
 
+	//add by wzb show wtwd-a8 info
+	SetWindowText(_T("About Tool"));
+	GetDlgItem(IDC_METACOREDLL_VERSION)->SetWindowText(_T("深圳沃特沃德A8事业部"));
+	GetDlgItem(IDC_METAAPPDLL_VERSION)->SetWindowText(_T("wzhibin@waterworld.com.cn"));
+	//end
+
     // return TRUE unless you set the focus to a control
     // EXCEPTION: OCX Property Pages should return FALSE
     return TRUE;
