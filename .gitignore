@@ -3,4 +3,5 @@ x64/
 temp/
 ipch/
 *.VC.VC.opendb
+*.VC.db
 
