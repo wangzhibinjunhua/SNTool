@@ -65,8 +65,12 @@ BOOL CAboutSNDlg::OnInitDialog()
 
 	//add by wzb show wtwd-a8 info
 	SetWindowText(_T("About Tool"));
+	CFont mFont;
+	mFont.CreatePointFont(150, _T("宋体"));
 	GetDlgItem(IDC_METACOREDLL_VERSION)->SetWindowText(_T("深圳沃特沃德A8事业部"));
+	GetDlgItem(IDC_METACOREDLL_VERSION)->SetFont(&mFont);
 	GetDlgItem(IDC_METAAPPDLL_VERSION)->SetWindowText(_T("wzhibin@waterworld.com.cn"));
+	GetDlgItem(IDC_METAAPPDLL_VERSION)->SetFont(&mFont);
 	//end
 
     // return TRUE unless you set the focus to a control

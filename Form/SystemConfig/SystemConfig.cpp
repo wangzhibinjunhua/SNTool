@@ -226,6 +226,7 @@ BOOL CSystemConfig::OnInitDialog()
 void CSystemConfig::HideSomeDlgItem()
 {
 	GetDlgItem(IDC_WRITE_SERIAL_NO_CHECK)->ShowWindow(SW_HIDE);
+	GetDlgItem(IDC_WRITE_BARC_CHECK)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_WRITE_IMEI_CHECK)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_WRITE_BT_CHECK)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_WRITE_WIFI_CHECK)->ShowWindow(SW_HIDE);
