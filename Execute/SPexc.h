@@ -103,13 +103,15 @@ protected:
     //virtual int DSDA_QueryNativeDownload();
     //virtual META_RESULT DSDA_StartNativeDownload();
     virtual bool DSDA_ExternalModemBackup();
-
+	virtual META_RESULT meta_cust_func();//add by wzb
+	virtual META_RESULT MetaCustFunc(int iFuncType, unsigned char *pDataIn, int iDataInLen, unsigned char *pDataOut, int iDataOutLen);//add by wzb
     virtual META_RESULT WriteNvramLoop();
 	virtual META_RESULT WriteCountryCode();//add by wzb
     virtual int REQ_FastbootLockOem(void);
     virtual int REQ_FastbootUnLockOem(void);
     int Fastboot_Lock_Oem();
     bool Adb_Manager_Init();
+	
     bool Adb_WR_Cmd(char *cmd_line,int cmd_length);
     int Adb_Detect_Devact();
     int Adb_Manager_Deinit();

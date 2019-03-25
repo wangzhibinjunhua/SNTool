@@ -12,12 +12,17 @@
 #include <string.h>
 #include "Encryption.h"
 #include "SLA_Challenge.h"
-
+#include <memory> // add by wzb for use auto_ptr
 #define s_MAX_PATH 512
 
 #define META_MODEM_SRV_ETS 3
 #define META_MODEM_CH_TUNNELING 2
 
+//add by wzb for metacustfunc type 20190325
+#define META_CUST_FUNC_TYPE_GET_PROPERTY 101
+#define META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_RADIO_COUNTRYCODE 102
+#define META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_SYS_MODEL_INFO 103
+//end
 
 extern CSNWriterDlg *g_pMainDlg;
 
@@ -1540,6 +1545,79 @@ META_RESULT SmartPhoneSN::ConductProdInfoData(unsigned char *pBuf, int nBufLen)
 
     return META_SUCCESS;
 }
+
+//add by wzb for meta custom func 20190324
+
+//example code
+META_RESULT SmartPhoneSN::meta_cust_func()
+{
+	META_RESULT ret_mr;
+	int data_in_len = 0;
+	std::auto_ptr<unsigned char> data_in;
+	int data_out_len = 0;
+	std::auto_ptr<unsigned char> data_out;
+	unsigned char dummy_out = 0u;
+
+	if (m_eMetaMode != SP_AP_META ) {
+		MTRACE(g_hEBOOT_DEBUG, "meta_cust_func not in ap meta return");
+		return META_FAILED;
+	}
+
+	data_in_len = 1024;
+	data_in.reset(new unsigned char[data_in_len]);
+	memset(data_in.get(), 0, data_in_len);
+	data_out_len = 1024;
+	data_out.reset(new unsigned char[data_out_len]);
+	memset(data_out.get(), 0, data_out_len);
+
+	// custom function 1
+	ret_mr = SP_META_Customer_Func_r(
+		m_hSPMetaHandle, 20000,
+		data_in.get(), data_in_len,
+		0, 1/*function 1*/, &dummy_out,
+		data_out.get(), &data_out_len);
+	if (ret_mr != META_SUCCESS || dummy_out != 't')
+	{
+		MTRACE(g_hEBOOT_DEBUG, _T("Custom Function fail.\n"));
+		return META_FAILED;
+	}
+
+	return META_SUCCESS;
+}
+
+META_RESULT SmartPhoneSN::MetaCustFunc(int iFuncType, unsigned char *pDataIn, int iDataInLen, unsigned char *pDataOut, int iDataOutLen)
+{
+	if (pDataIn == NULL || pDataOut == NULL || iDataOutLen <= 0)
+		return META_INVALID_ARGUMENTS;
+	META_RESULT MetaResult;
+	unsigned char cDummyOut = 0u;
+	if (m_eMetaMode != SP_AP_META) {
+		MTRACE(g_hEBOOT_DEBUG, "MetaCustFunc not in ap meta return");
+		return META_FAILED;
+	}
+
+	int itmpDataOutLen = 1024;
+	// custom function 1
+	MetaResult = SP_META_Customer_Func_r(
+		m_hSPMetaHandle, 20000,
+		pDataIn, iDataInLen,
+		0, iFuncType/*function 1*/, &cDummyOut,
+		pDataOut, &itmpDataOutLen);
+	char *tmpDatain = (char *)pDataIn;
+	char *tmpDataout = (char *)pDataOut;
+	//memcpy(tmpDatain, pDataIn, iDataInLen);
+	MTRACE(g_hEBOOT_DEBUG, "MetaCustFunc MetaResult=%d,cDummyOut=%d,datain=%s,inlen=%d,dataout=%s,outlen=%d",MetaResult, cDummyOut,tmpDatain,iDataInLen, tmpDataout,itmpDataOutLen);
+	
+	if (MetaResult != META_SUCCESS || cDummyOut != 't')
+	{
+		MTRACE(g_hEBOOT_DEBUG, _T("Custom Function fail.\n"));
+		return META_FAILED;
+	}
+
+	return META_SUCCESS;
+}
+
+//end
 
 //add by wzb 20190318
 
@@ -4192,7 +4270,17 @@ void SmartPhoneSN::ThreadMainEntryPoint()
         UpdateUIMsg("Start loop write data to nvram...");
 		//modify by wzb for write country code 20190318
 		//MetaResult = WriteNvramLoop();
-		MetaResult =WriteCountryCode();
+		//MetaResult =WriteCountryCode();
+		//for test
+		char *pPropertyModel = "TP0910A44HK";
+		//char *pPropertyModel = "ro.product.model";
+		int iPropertyModelLen = strlen(pPropertyModel);
+		unsigned char pDatainPropertyModel[32] = { 0 };
+		memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
+		unsigned char pRev[32] = { 0 };
+		//MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
+		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_RADIO_COUNTRYCODE, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
+		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_SYS_MODEL_INFO, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
 		//end
         if (MetaResult != META_SUCCESS)
         {
@@ -4272,6 +4360,8 @@ End:
     MetaHandle_DeInit();
     UpdateMainDlgUI(true, CANCEL);
 }
+
+
 
 bool SmartPhoneSN::Adb_Manager_Init()
 {

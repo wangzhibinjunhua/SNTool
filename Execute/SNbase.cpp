@@ -1265,9 +1265,14 @@ void SNBase::SNThread_Init()
     m_hWriteToNVRAMEvent = NULL;
     m_bBackupNvramSuccess = false;
 
-    m_bWriteModemNvram = g_sMetaComm.sWriteOption.bWriteMeid || g_sMetaComm.sWriteOption.bWriteEsn ||
-        ((g_sMetaComm.sWriteOption.bWriteIMEI || g_sMetaComm.sWriteOption.bWriteBarcode) && g_sMetaComm.eTargetType != TABLET_WIFI_ONLY);
+	//modify by wzb for not enter modem meta mode
+	// m_bWriteModemNvram = g_sMetaComm.sWriteOption.bWriteMeid || g_sMetaComm.sWriteOption.bWriteEsn ||
+   //     ((g_sMetaComm.sWriteOption.bWriteIMEI || g_sMetaComm.sWriteOption.bWriteBarcode) && g_sMetaComm.eTargetType != TABLET_WIFI_ONLY);
 
+	
+	m_bWriteModemNvram = g_sMetaComm.sWriteOption.bWriteMeid || g_sMetaComm.sWriteOption.bWriteEsn ||
+		     ((g_sMetaComm.sWriteOption.bWriteIMEI ) && g_sMetaComm.eTargetType != TABLET_WIFI_ONLY);
+	//end
     UpdateUIMsg("");
 }
 
