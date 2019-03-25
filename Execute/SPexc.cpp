@@ -4271,16 +4271,22 @@ void SmartPhoneSN::ThreadMainEntryPoint()
 		//modify by wzb for write country code 20190318
 		//MetaResult = WriteNvramLoop();
 		//MetaResult =WriteCountryCode();
+		//for test factory
+		EMMC_CLEAR_CNF_S emmcCnf;
+		memset(&emmcCnf, 0, sizeof(EMMC_CLEAR_CNF_S));
+		MetaResult=SP_META_ClearValue_r(m_hSPMetaHandle, 20000, &emmcCnf);
+		UpdateUIMsg("emmc clear status=%d", emmcCnf.status);
+		
 		//for test
-		char *pPropertyModel = "TP0910A44HK";
+		//char *pPropertyModel = "TP0910A44HK";
 		//char *pPropertyModel = "ro.product.model";
-		int iPropertyModelLen = strlen(pPropertyModel);
-		unsigned char pDatainPropertyModel[32] = { 0 };
-		memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
-		unsigned char pRev[32] = { 0 };
+		//int iPropertyModelLen = strlen(pPropertyModel);
+		//unsigned char pDatainPropertyModel[32] = { 0 };
+		//memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
+		//unsigned char pRev[32] = { 0 };
 		//MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
-		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_RADIO_COUNTRYCODE, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
-		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_SYS_MODEL_INFO, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
+		//MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_RADIO_COUNTRYCODE, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
+		//MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_SET_PROPERTY_PERSIST_SYS_MODEL_INFO, pDatainPropertyModel, iPropertyModelLen, pRev, 32);
 		//end
         if (MetaResult != META_SUCCESS)
         {
