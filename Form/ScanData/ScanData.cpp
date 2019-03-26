@@ -76,7 +76,7 @@ void CScanData::DoDataExchange(CDataExchange* pDX)
 	DDV_MaxChars(pDX, m_strDrmkeyMCIDData, 32);
 	DDX_Text(pDX, IDC_SERIAL_NO_DATA, m_strSerialNoData);
 	//DDV_MaxChars(pDX, m_strSerialNoData, SERIAL_NO_LEN);
-	DDV_MaxChars(pDX, m_strSerialNoData, 12); //modify by wzb
+	DDV_MaxChars(pDX, m_strSerialNoData, 16); //modify by wzb
 	// C2K modem
 	DDX_Text(pDX, IDC_MEID_DATA, m_strMeidData);
 	DDV_MaxChars(pDX, m_strMeidData, 14);
@@ -761,11 +761,11 @@ bool CScanData::CheckScanData(const char *pStrHeader, bool bCheckHeader, const c
                 return false;
             }
 			#else
-			if (dataLength !=12)
+			if (dataLength <= 0 || dataLength > 16)
             {
 				//modify by wzb 20190320
 				//sprintf_s(pScanMsg, "%s = \"%s\" length must not be longer than %d!", m_pstrScanItem, pInData, SERIAL_NO_LEN);
-				sprintf_s(pScanMsg, "SMO = \"%s\" length must be  12 !",  pInData);
+				sprintf_s(pScanMsg, "SMO = \"%s\" length must not be longer than 16 !",  pInData);
                 SetDlgItemText(IDC_SCAN_MSG, pScanMsg);
                 return false;
             }
