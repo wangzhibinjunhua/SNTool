@@ -350,13 +350,14 @@ void CSNWriterDlg::ParameterInit()
 #if 1
 	CString strTempTestInfo;
 	strTempTestInfo.Format(
-		_T("DB_Machine, %s\r\n")
-		_T("DB_SQLSrc, %s\r\n")
-		_T("DB_SQLUser, %s\r\n")
-		_T("DB_SQLPassword, %s\r\n")
-		_T("DB_Port, %s\r\n")
-		_T("DB_Name, %s\r\n")
-		_T("SoftwarePN, %s\r\n"),
+		_T("«ÎºÏ≤È≈‰÷√–≈œ¢ \r\n")
+		_T("DB_Machine: %s\r\n")
+		_T("DB_SQLSrc: %s\r\n")
+		_T("DB_SQLUser: %s\r\n")
+		_T("DB_SQLPassword: %s\r\n")
+		_T("DB_Port: %s\r\n")
+		_T("DB_Name: %s\r\n")
+		_T("SoftwarePN: %s\r\n"),
 		g_sMetaComm.strDBMachine,
 		g_sMetaComm.strDBSQLSrc,
 		g_sMetaComm.strDBSQLUser,
