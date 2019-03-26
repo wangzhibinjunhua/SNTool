@@ -8,6 +8,7 @@
 #define IDD_SCANDATA_DIALOG             129
 #define IDD_SYSTEM_CONFIG_DIALOG        130
 #define IDB_BITMAP_FAIL                 131
+#define IDD_SYSTEM_CONFIG_DIALOG2       131
 #define IDB_BITMAP_PASS                 133
 #define IDR_SN_MENU                     134
 #define IDD_ABOUTSN_DIALOG              141
@@ -187,6 +188,7 @@
 #define IDC_LOG_DIR                     1162
 #define IDC_BTN_LOG                     1163
 #define IDC_LOCK_OTP                    1164
+#define IDC_IMAGE1                      1169
 #define IDC_TV_TESTITEM                 10091
 #define IDC_PROGRESS_STATUS1            10092
 #define IDC_TV_TESTITEM1                10101
@@ -257,9 +259,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        162
+#define _APS_NEXT_RESOURCE_VALUE        164
 #define _APS_NEXT_COMMAND_VALUE         32801
-#define _APS_NEXT_CONTROL_VALUE         1169
+#define _APS_NEXT_CONTROL_VALUE         1170
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

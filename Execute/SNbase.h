@@ -105,6 +105,7 @@ protected:
     virtual META_RESULT REQ_WriteToModemNVRAM(FT_NVRAM_WRITE_REQ *psNVRAM_WriteReq, FT_NVRAM_WRITE_CNF *psNVRAM_WriteCnf);
     virtual void UpdateUICountResult(WriteNvram_Status_e eWriteStatus);
     virtual int UpdateUIMsg(const char * strMsg, ...);
+	virtual int UpdateTestItemUIMsg(int type, const char * strMsg, ...);
     virtual CheckCalFlag_Status_e CheckCalibrationStatus(const char* strBarcode);
     virtual CheckFinalTestFlag_Status_e CheckFinalTestStatus(const char* strBarcode);
     virtual bool CheckCalFinalTestStatus(const char* strBarcode);

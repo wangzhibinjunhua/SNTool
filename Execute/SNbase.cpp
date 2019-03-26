@@ -194,6 +194,51 @@ int SNBase::UpdateUIMsg(const char * strMsg, ...)
     return iRet;
 }
 
+//add by wzb for testitem info UI
+int SNBase::UpdateTestItemUIMsg(int type,const char * strMsg, ...)
+{
+	int iRet = 0;
+	char szBuf[256] = "";
+	va_list varg;
+
+	va_start(varg, strMsg);
+	iRet = vsprintf_s(szBuf, strMsg, varg);
+	va_end(varg);
+	switch (type)
+	{
+	case 1:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO1, szBuf);
+		break;
+	case 2:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO2, szBuf);
+		break;
+	case 3:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO3, szBuf);
+		break;
+	case 4:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO4, szBuf);
+		break;
+	case 5:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO5, szBuf);
+		break;
+	case 6:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO6, szBuf);
+		break;
+	case 7:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO7, szBuf);
+		break;
+	case 8:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO8, szBuf);
+		break;
+	default:
+		break;
+	}
+	
+	return iRet;
+}
+
+//end
+
 void SNBase::UpdateUICountResult(WriteNvram_Status_e eWriteStatus)
 {
     static UINT totalNums = 0;
@@ -1225,7 +1270,10 @@ void SNBase::CustomInfo_Init()
 	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO6, "");
 	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO7, "");
 	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO8, "");
-
+	memset(g_sMetaComm.strCCFlag, 0, sizeof(g_sMetaComm.strCCFlag));
+	memset(g_sMetaComm.strDetailModel, 0, sizeof(g_sMetaComm.strDetailModel));
+	memset(g_sMetaComm.strPhoneSN, 0, sizeof(g_sMetaComm.strPhoneSN));
+	memset(g_sMetaComm.strPhoneModel, 0, sizeof(g_sMetaComm.strPhoneModel));
 }
 
 void SNBase::SNThread_Init()

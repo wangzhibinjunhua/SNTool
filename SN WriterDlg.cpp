@@ -29,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "写国家码工具 V1.0.0";
+const char *g_strToolVersion = "写国家码工具 V1.1.260319";
 
 extern CSNWriterDlg *g_pMainDlg;
 
@@ -369,6 +369,10 @@ void CSNWriterDlg::ParameterInit()
 #endif
 	//end
 
+	//add by wzb for init ole sql
+	//OleEnvInit();
+	//end
+
 }
 void CSNWriterDlg::EnableStartBTN(bool bEnable)
 {
@@ -703,13 +707,13 @@ void CSNWriterDlg::OnAboutSn()
 {
     // TODO: Add your command handler code here
    //add by wzb for test
-	if (0)
+	if (1)
 	{
 		OleEnvInit();
 		//UploadDataToSql();
-		SelectSqlByType(SELECT_TPCONTROL);
+		//SelectSqlByType(SELECT_TPCONTROL);
 		//SelectSqlByType(SELECT_TPINPUT);
-		//SelectSqlByType(SELECT_TPPLAN);
+		SelectSqlByType(SELECT_TPPLAN);
 		return;
 	}
 	//end

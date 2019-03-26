@@ -107,6 +107,7 @@ protected:
 	virtual META_RESULT MetaCustFunc(int iFuncType, unsigned char *pDataIn, int iDataInLen, unsigned char *pDataOut, int iDataOutLen);//add by wzb
     virtual META_RESULT WriteNvramLoop();
 	virtual META_RESULT WriteCountryCode();//add by wzb
+	virtual META_RESULT SelectSMOInfo();//add by wzb
     virtual int REQ_FastbootLockOem(void);
     virtual int REQ_FastbootUnLockOem(void);
     int Fastboot_Lock_Oem();

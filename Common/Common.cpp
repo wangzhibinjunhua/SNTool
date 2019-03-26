@@ -768,13 +768,22 @@ int SelectSqlByType(int type)
 	switch (type)
 	{
 	case SELECT_TPCONTROL:
-		strSQL = "SELECT [ID] FROM [DBTMTS].[dbo].[TpControl] WHERE [SN]='3901A18423D00180'";
+		strSQL = "SELECT [ID] FROM [DBTMTS].[dbo].[TpControl] WHERE [SN]=";
+		strSQL += "'";
+		strSQL += g_sMetaComm.sScanData.strBarcode;
+		strSQL += "'";
 		break;
 	case SELECT_TPINPUT:
-		strSQL = "SELECT [ID] FROM [DBTMTS].[dbo].[TpInput] WHERE [SN]='3901A18423D00180'";
+		strSQL = "SELECT [ID] FROM [DBTMTS].[dbo].[TpInput] WHERE [SN]=";
+		strSQL += "'";
+		strSQL += g_sMetaComm.sScanData.strBarcode;
+		strSQL += "'";
 		break;
 	case SELECT_TPPLAN:
-		strSQL = "SELECT [CCFlag],[DetailModel] FROM [DBTMTS].[dbo].[TpPlan] WHERE [SMO]='1301001_01'";
+		strSQL = "SELECT [CCFlag],[DetailModel] FROM [DBTMTS].[dbo].[TpPlan] WHERE [SMO]=";
+		strSQL += "'";
+		strSQL += g_sMetaComm.sScanData.strSerialNo;
+		strSQL += "'";
 		break;
 	default:
 		break;
@@ -840,6 +849,8 @@ int SelectSqlByType(int type)
 				strDetailModel.TrimRight();
 				//AfxMessageBox("ccflag=" + strCCFlag);
 				//AfxMessageBox("DetailModel=" + strDetailModel);
+				strcpy_s(g_sMetaComm.strCCFlag, strCCFlag);
+				strcpy_s(g_sMetaComm.strDetailModel, strDetailModel);
 			}
 			catch (_com_error e)
 			{

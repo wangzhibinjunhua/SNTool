@@ -293,8 +293,12 @@ typedef struct {
 	char strDBPort[MAX_PATH];
 	char strDBName[MAX_PATH];
 	char strSoftwarePN[MAX_PATH];
-
+	char strCCFlag[4];
+	char strDetailModel[64];
+	char strPhoneSN[64];
+	char strPhoneModel[64];
 	//end
+	
 } META_Common_struct;
 
 typedef struct

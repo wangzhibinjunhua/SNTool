@@ -106,6 +106,24 @@ void SmartPhoneSN::SPInit()
     }
 }
 
+//add by wzb for search smo and detailmodel
+META_RESULT SmartPhoneSN::SelectSMOInfo()
+{
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::SelectSMOInfo() start...");
+	OleEnvInit();
+	int iRet = SelectSqlByType(SELECT_TPPLAN);
+	if (iRet==SELECT_SMO_OK)
+	{
+		return META_SUCCESS;
+	}
+	else 
+	{
+		return META_FAILED;
+	}
+
+}
+//end
+
 
 //add by wzb
 META_RESULT SmartPhoneSN::WriteCountryCode()
@@ -114,34 +132,89 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() scanSN=%s...",m_sScanData.strBarcode);
 	UpdateProgress(0.25);
 	META_RESULT MetaResult = META_SUCCESS;
+
+	
+
+	//step 2 check SN //2222222222222222222222222222222222222222//////////
+	UpdateStatusProgress(4, 0.3, 0);
 	MetaResult = ReadSN_From_PRODINFO();
 	if (MetaResult != META_SUCCESS)
 	{
 		UpdateStatusProgress(4,1.0,0);
-		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO4, "fail");
+		UpdateTestItemUIMsg(4, "fail,phone SN is %s", g_sMetaComm.strPhoneSN);
 		MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check SN FAIL!");
+		return MetaResult;
 	}
-	else
+	UpdateStatusProgress(4, 1.0, 1);
+	UpdateTestItemUIMsg(4, "pass,phone SN is %s", g_sMetaComm.strPhoneSN);
+	UpdateProgress(0.5);
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check SN OK!");
+	//step 2 check SN end //222222222222222222222222222222222222222222222222//////////////
+	
+
+	//step 3 check phone detailmodel //333333333333333333333333333333333333//////////
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()get phone model start");
+	char *pPropertyModel = "ro.product.model";
+	int iPropertyModelLen = strlen(pPropertyModel);
+	unsigned char pDatainPropertyModel[32] = { 0 };
+	memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
+	unsigned char pRev[64] = { 0 };
+	MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyModel, iPropertyModelLen, pRev, 64);
+	if (MetaResult != META_SUCCESS)
 	{
-		UpdateProgress(0.5);
-		
-		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO4, "pass");
-		MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check SN OK!");
-		MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()write countrycode start");
-		MetaResult=REQ_CountryCode_WriteAP_NVRAM_Start(m_sScanData.strSerialNo,1);
-		if(MetaResult != META_SUCCESS)
-		{
-			g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO5, "fail");
-			MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode fail");
-		}else
-		{
-			g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO5, "pass");
-			MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode ok");
-		}
+		return MetaResult;
 	}
+	memcpy(g_sMetaComm.strPhoneModel, pRev, 64);
+	UpdateStatusProgress(5, 0.5, 0);
+	if (strncmp(g_sMetaComm.strDetailModel, g_sMetaComm.strPhoneModel, 6) !=0)
+	{
+		UpdateTestItemUIMsg(5, "fail phone model is %s", g_sMetaComm.strPhoneModel);
+		UpdateStatusProgress(5, 1.0, 0);
+		return META_FAILED;
+	}
+	UpdateStatusProgress(5, 1.0, 1);
+	UpdateTestItemUIMsg(5, "pass phone model is %s", g_sMetaComm.strPhoneModel);
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check phone model ok");
+	//step 3 check phone detailmodel end //33333333333333333333333333333/////////////////////////////
+	UpdateProgress(0.75);
+
+
+	//step 4 write country code //444444444444444444444444444444444444///////////////
+	UpdateStatusProgress(6, 0.3, 0);
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()write countrycode start");
+	CString strCCFlag;
+	CString strCCFlagFir;
+	CString strCCFlagSec;
+	strCCFlagFir.Format("%x", g_sMetaComm.strCCFlag[0]);
+	strCCFlagSec.Format("%x", g_sMetaComm.strCCFlag[1]);
+	strCCFlag = strCCFlagFir;
+	strCCFlag += strCCFlagSec;
+	char* pCCFlag = strCCFlag.GetBuffer(0);
+	strCCFlag.ReleaseBuffer();
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()write countrycode :%s", pCCFlag);
+	MetaResult = REQ_CountryCode_WriteAP_NVRAM_Start(pCCFlag, 1);
+	if (MetaResult != META_SUCCESS)
+	{
+		UpdateStatusProgress(6, 1.0, 0);
+		UpdateTestItemUIMsg(6, "fail");
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode fail");
+		return META_FAILED;
+	}
+	UpdateStatusProgress(6, 1.0, 1);
+	UpdateTestItemUIMsg(6, "pass");
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode ok");
+	//step 4 write country code end  //4444444444444444444444444444444444//////////////
+	UpdateProgress(0.85);
+
+	//step 5 write detailmodel to proinfo //55555555555555555555555////////////
+
+
+
+
+
 	
 	MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() end...");
-	return MetaResult;
+	return META_SUCCESS;
 
 }
 //end
@@ -1695,6 +1768,9 @@ META_RESULT SmartPhoneSN::ReadSN_From_PRODINFO()
             MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: Check SN data PASS!!");
 
 		}
+		//temp save read sn
+		strcpy_s(g_sMetaComm.strPhoneSN, tmpReadData);
+
 
     }
     MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteToAPNVRAM(): Read nvram data end...");
@@ -4118,6 +4194,36 @@ void SmartPhoneSN::ThreadMainEntryPoint()
         //MTRACE (g_hEBOOT_DEBUG, "m_bWriteModemNvram = %d,m_sMdInfo.number_of_md = %d", m_bWriteModemNvram, m_sMdInfo.number_of_md);
         SPInit();
 
+		//add by wzb 
+		//step 1 select smo //1111111111111111111111111111//////////////////////
+		UpdateStatusProgress(1, 0.3, 0);
+		int iRet = SelectSMOInfo();
+		if (iRet != META_SUCCESS)
+		{
+			AfxMessageBox(_T("≤È—ØSMO¥ÌŒÛ"));
+			UpdateStatusProgress(1, 1.0, 0);
+			g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO1, "fail");
+			
+		}
+		else
+		{
+			//check CCFlag and DetailModel
+			int iDetailModelLen = strlen(g_sMetaComm.strDetailModel);
+			if (g_sMetaComm.strCCFlag[0] != g_sMetaComm.strDetailModel[iDetailModelLen - 2] || g_sMetaComm.strCCFlag[1] != g_sMetaComm.strDetailModel[iDetailModelLen - 1])
+			{
+				AfxMessageBox(_T("CCFlag∫ÕDetailModel≤ª∆•≈‰"));
+				UpdateStatusProgress(1, 1.0, 0);
+				
+			}
+			else
+			{
+				UpdateStatusProgress(1, 1.0, 1);
+				UpdateTestItemUIMsg(1, "%s,%s", g_sMetaComm.strCCFlag, g_sMetaComm.strDetailModel);
+			}
+		}
+		//step 1 elect smo end //1111111111111111111111111111//////////////////////
+		//end
+
         SetupMetaModeParameters();
 
         UpdateUIMsg("Start load and init AP database...");
@@ -4130,7 +4236,6 @@ void SmartPhoneSN::ThreadMainEntryPoint()
         }
 
         EnableStartBTN(true);
-		
 	
         MetaResult = (META_RESULT)EnterAPMetaMode();
 		
@@ -4270,12 +4375,12 @@ void SmartPhoneSN::ThreadMainEntryPoint()
         UpdateUIMsg("Start loop write data to nvram...");
 		//modify by wzb for write country code 20190318
 		//MetaResult = WriteNvramLoop();
-		//MetaResult =WriteCountryCode();
+		MetaResult =WriteCountryCode();
 		//for test factory
-		EMMC_CLEAR_CNF_S emmcCnf;
-		memset(&emmcCnf, 0, sizeof(EMMC_CLEAR_CNF_S));
-		MetaResult=SP_META_ClearValue_r(m_hSPMetaHandle, 20000, &emmcCnf);
-		UpdateUIMsg("emmc clear status=%d", emmcCnf.status);
+		//EMMC_CLEAR_CNF_S emmcCnf;
+		//memset(&emmcCnf, 0, sizeof(EMMC_CLEAR_CNF_S));
+		//MetaResult=SP_META_ClearValue_r(m_hSPMetaHandle, 20000, &emmcCnf);
+		//UpdateUIMsg("emmc clear status=%d", emmcCnf.status);
 		
 		//for test
 		//char *pPropertyModel = "TP0910A44HK";
