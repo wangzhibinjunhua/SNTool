@@ -110,7 +110,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>shlwapi.lib;./mtklib/meta/lib/*.lib;./mtklib/Eboot/lib/*.lib;./mtklib/Security/lib/*.lib;./mtklib/SNFstream/lib/*.lib;./mtklib/DebugTrace/lib/*.lib;./mtklib/usbswitchtool/lib/*.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)Output\$(ProjectName).exe</OutputFile>
+      <OutputFile>$(SolutionDir)Output\CountryCodeTool.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

@@ -29,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "写国家码工具 V1.1.260327";//
+const char *g_strToolVersion = "写国家码工具 V1.1.270319";//
 //add by wzb
 int iDateLimit = 190427;//版本号和限制时间同步修改
 //end
@@ -706,7 +706,7 @@ void CSNWriterDlg::OnAboutSn()
 {
     // TODO: Add your command handler code here
    //add by wzb for test
-	if (1)
+	if (0)
 	{
 		OleEnvInit();
 		//UploadDataToSql();

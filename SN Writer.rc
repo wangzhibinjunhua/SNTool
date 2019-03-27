@@ -663,7 +663,7 @@ BEGIN
             VALUE "InternalName", "SN Writer"
             VALUE "LegalCopyright", "Copyright (C) 2016"
             VALUE "OriginalFilename", "SN Writer.exe"
-            VALUE "ProductName", "SN Writer"
+            VALUE "ProductName", "CountryCode"
             VALUE "ProductVersion", "1.1848.0.0"
         END
     END
