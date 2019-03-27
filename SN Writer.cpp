@@ -13,6 +13,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+extern int iDateLimit;
+
 /////////////////////////////////////////////////////////////////////////////
 // CSNWriterApp
 
@@ -85,6 +87,19 @@ BOOL CSNWriterApp::InitInstance()
         ::AfxMessageBox("SNDATA file maybe destory.", MB_ICONERROR);
         return FALSE;
     }
+
+	//add by wzb for time limit
+	CTime mTime;
+	mTime = CTime::GetCurrentTime();
+	CString strDate = mTime.Format("%y%m%d");
+	int iDate = _ttoi(strDate);
+	
+	if (iDate > iDateLimit)
+	{
+		::AfxMessageBox(_T("版本太低,请更新软件\r\n 错误代码0x100010"), MB_ICONERROR);
+		return FALSE;
+	}
+	//end
 
     CSNWriterDlg dlg;
     m_pMainWnd = &dlg;

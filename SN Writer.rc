@@ -5002,7 +5002,12 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_ABOUTBOX            "&About SN Writer..."
+    IDS_ABOUTBOX            "&About CountryCode Tool..."
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "CountryCode Tool"
 END
 
 #endif    // Ó¢Óï(ÃÀ¹ú) resources

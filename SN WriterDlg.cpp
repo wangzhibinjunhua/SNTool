@@ -29,7 +29,10 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "写国家码工具 V1.1.260319";
+const char *g_strToolVersion = "写国家码工具 V1.1.260327";//
+//add by wzb
+int iDateLimit = 190427;//版本号和限制时间同步修改
+//end
 
 extern CSNWriterDlg *g_pMainDlg;
 
@@ -351,14 +354,12 @@ void CSNWriterDlg::ParameterInit()
 	CString strTempTestInfo;
 	strTempTestInfo.Format(
 		_T("请检查配置信息 \r\n")
-		_T("DB_Machine: %s\r\n")
 		_T("DB_SQLSrc: %s\r\n")
 		_T("DB_SQLUser: %s\r\n")
 		_T("DB_SQLPassword: %s\r\n")
 		_T("DB_Port: %s\r\n")
 		_T("DB_Name: %s\r\n")
 		_T("SoftwarePN: %s\r\n"),
-		g_sMetaComm.strDBMachine,
 		g_sMetaComm.strDBSQLSrc,
 		g_sMetaComm.strDBSQLUser,
 		g_sMetaComm.strDBSQLPassword,
@@ -370,9 +371,6 @@ void CSNWriterDlg::ParameterInit()
 #endif
 	//end
 
-	//add by wzb for init ole sql
-	//OleEnvInit();
-	//end
 
 }
 void CSNWriterDlg::EnableStartBTN(bool bEnable)
