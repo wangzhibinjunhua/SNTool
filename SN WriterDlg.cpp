@@ -713,6 +713,8 @@ void CSNWriterDlg::OnAboutSn()
 		//SelectSqlByType(SELECT_TPCONTROL);
 		//SelectSqlByType(SELECT_TPINPUT);
 		SelectSqlByType(SELECT_TPPLAN);
+		//SelectSqlByType(SELECT_TPPLAN);
+		UploadDataToSql();
 		return;
 	}
 	//end

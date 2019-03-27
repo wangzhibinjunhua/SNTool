@@ -890,8 +890,13 @@ int UploadDataToSql()
 	strSRC += g_sMetaComm.strDBSQLUser;//"root"; 
 	strSRC += ";PWD=";
 	strSRC += g_sMetaComm.strDBSQLPassword;//"123456";
-	CString strSQL = "INSERT INTO [DBTMTS].[dbo].[TpInput] ([SN], [IMEI1], [IMEI2], [MO], [PN], [InputTime], [Software], [ZPN]) VALUES ('3901A18423D00180', '868968030004432', '868968030465670', '', '2541254120', '2019-03-22 14:47:49.170', '', '');";
-
+	//CString strSQL = "INSERT INTO [DBTMTS].[dbo].[TpCountryCode] ([SN], [SoftwarePN], [CountryCode], [WriteTime], [SMO], [CCFlag], [DetailModel] ) VALUES ('3901A18423D00180', '868968030004432', '868968030465670', '', '2541254120', '2019-03-22 14:47:49.170', '', '');";
+	CString strSQL;
+	CTime mTime;
+	mTime = CTime::GetCurrentTime();
+	CString strDate = mTime.Format("%Y-%m-%d %H:%M:%S");
+	strSQL.Format("INSERT INTO[DBTMTS].[dbo].[TpCountryCode]([SN], [SoftwarePN], [CountryCode], [WriteTime], [SMO], [CCFlag], [DetailModel]) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s');",g_sMetaComm.strPhoneSN,g_sMetaComm.strSoftwarePN,g_sMetaComm.strCCFlag,strDate,g_sMetaComm.sScanData.strSerialNo,g_sMetaComm.strCCFlag,g_sMetaComm.strDetailModel);
+	//AfxMessageBox(strSQL);//test
 	_variant_t varSRC(strSRC);
 	_variant_t varSQL(strSQL);
 	_bstr_t bstrSRC(strSRC);

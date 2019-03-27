@@ -207,11 +207,28 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateProgress(0.85);
 
 	//step 5 write detailmodel to proinfo //55555555555555555555555////////////
+	MetaResult=REQ_WriteDetailModel_WriteAP_PRODINFO_Start();
+	if (MetaResult != META_SUCCESS)
+	{
+		return META_FAILED;
+	}
+
+	//end step 5 write detailmodel to proinfo //5555555555555555////////////////
 
 
-
-
-
+	//step 6 upload data to sql server //////6666666666666666666666666666////////////////
+	UpdateStatusProgress(8, 0.3, 0);
+	OleEnvInit();
+	int itmpRet = UploadDataToSql();
+	if (itmpRet != 0)
+	{
+		UpdateStatusProgress(8, 1.0, 0);
+		UpdateTestItemUIMsg(8, "fail");
+		return META_FAILED;
+	}
+	UpdateStatusProgress(8, 1.0, 1);
+	UpdateTestItemUIMsg(8, "pass");
+	//end step 6 upload data to sql server //////6666666666666666666666666666////////////////
 	
 	MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() end...");
 	return META_SUCCESS;
@@ -1798,6 +1815,152 @@ Err:
     return meta_result;
 }
 //end
+
+//add by wzb for write detaimodel to prodinfo addr offset 400 (0x190)
+META_RESULT SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start()
+{
+	META_RESULT meta_result = META_SUCCESS;
+	m_bWriteNvram = true;
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start(): Write detailmodel to prod_info start...");
+
+	int iMetaTimeout = 5000;
+	int iWriteBufSize = 0;
+	char *pLID = "AP_CFG_REEB_PRODUCT_INFO_LID";
+	char *pFuncName = NULL;
+	unsigned char *pWriteData = NULL;
+
+	AP_FT_NVRAM_WRITE_REQ sNVRAM_WriteReq;
+	AP_FT_NVRAM_READ_REQ sNVRAM_ReadReq;
+	AP_FT_NVRAM_READ_CNF sNVRAM_ReadCnf;
+
+	// Check
+	if (g_sMetaComm.strDetailModel == NULL || strlen(g_sMetaComm.strDetailModel) == 0)
+	{
+		return META_INVALID_ARGUMENTS;
+	}
+
+
+	memset(&sNVRAM_WriteReq, 0, sizeof(AP_FT_NVRAM_WRITE_REQ));
+	memset(&sNVRAM_ReadReq, 0, sizeof(AP_FT_NVRAM_READ_REQ));
+	memset(&sNVRAM_ReadCnf, 0, sizeof(AP_FT_NVRAM_READ_CNF));
+
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::SP_META_NVRAM_GetRecLen(): Start to get nvram struct size via LID = \"%s\"...", pLID);
+	meta_result = SP_META_NVRAM_GetRecLen(pLID, &iWriteBufSize);
+	if (META_SUCCESS != meta_result)
+	{
+		MTRACE_ERR(g_hEBOOT_DEBUG, "SmartPhoneSN::SP_META_NVRAM_GetRecLen(): Get nvram struct size fail, MetaResult = %s", ResultToString_SP(meta_result));
+		return meta_result;
+	}
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::SP_META_NVRAM_GetRecLen(): Get nvram struct size = %d successfully!", iWriteBufSize);
+	if (NULL != sNVRAM_ReadCnf.buf)
+	{
+		free(sNVRAM_ReadCnf.buf);
+		sNVRAM_ReadCnf.buf = NULL;
+	}
+
+	if (NULL != pWriteData)
+	{
+		free(pWriteData);
+		pWriteData = NULL;
+	}
+
+	sNVRAM_ReadReq.LID = pLID;
+	sNVRAM_ReadReq.RID = 1;
+	sNVRAM_ReadCnf.len = iWriteBufSize;
+	sNVRAM_ReadCnf.buf = (unsigned char*)malloc(iWriteBufSize * sizeof(unsigned char));
+	pWriteData = (unsigned char*)malloc(iWriteBufSize * sizeof(unsigned char));
+	if (NULL == sNVRAM_ReadCnf.buf || NULL == pWriteData)
+	{
+		MTRACE_ERR(g_hEBOOT_DEBUG, "Malloc heap memory cause fail!");
+		return  META_FAILED;
+	}
+
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_ReadFromAPNVRAM(): Start to read nvram data...");
+	meta_result = REQ_ReadFromAPNVRAM(&sNVRAM_ReadReq, &sNVRAM_ReadCnf);
+	if (meta_result != META_SUCCESS)
+	{
+		pFuncName = "SmartPhoneSN::REQ_ReadFromAPNVRAM()";
+		goto Err;
+	}
+
+	MTRACE(g_hEBOOT_DEBUG, "memcpy detailmodel to Prod_Info nvram data start...");
+	
+	//detailmodel in prodinfo offset 400 (0x190)
+	memcpy(sNVRAM_ReadCnf.buf + 0x190, g_sMetaComm.strDetailModel, strlen(g_sMetaComm.strDetailModel));
+	memcpy(pWriteData, sNVRAM_ReadCnf.buf, iWriteBufSize);
+	MTRACE(g_hEBOOT_DEBUG, "memcpy detailmodel to Prod_Info nvram data successfully!!");
+	
+
+	sNVRAM_WriteReq.LID = pLID;
+	sNVRAM_WriteReq.RID = 1;
+	sNVRAM_WriteReq.len = iWriteBufSize;
+	sNVRAM_WriteReq.buf = pWriteData;
+	m_sNVRAM_OPID = 1;
+
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start(): Start to write nvram data...");
+	meta_result = REQ_WriteToAPNVRAM(sNVRAM_WriteReq);
+	if (meta_result != META_SUCCESS)
+	{
+		pFuncName = "SmartPhoneSN::REQ_WriteToAPNVRAM()";
+		goto Err;
+	}
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteToAPNVRAM(): Write nvram data successfully!");
+
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteToAPNVRAM(): Read nvram data for check start...");
+	memset(sNVRAM_ReadCnf.buf, 0, sNVRAM_ReadCnf.len);
+	meta_result = REQ_ReadFromAPNVRAM(&sNVRAM_ReadReq, &sNVRAM_ReadCnf);
+	if (meta_result != META_SUCCESS)
+	{
+		pFuncName = "SmartPhoneSN::REQ_ReadFromAPNVRAM()";
+		goto Err;
+	}
+	else
+	{
+		if (memcmp(sNVRAM_ReadCnf.buf, pWriteData, sNVRAM_ReadCnf.len) != 0)
+		{
+			MTRACE_ERR(g_hEBOOT_DEBUG, "SmartPhoneSN: Check prod_info data FAIL!!");
+			meta_result = META_FAILED;
+		}
+		else
+		{
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: Check prod_info data PASS!!");
+		}
+	}
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start(): Read nvram data for check end...");
+
+	if (sNVRAM_ReadCnf.buf != NULL)
+	{
+		free(sNVRAM_ReadCnf.buf);
+		sNVRAM_ReadCnf.buf = NULL;
+	}
+
+	if (pWriteData != NULL)
+	{
+		free(pWriteData);
+		pWriteData = NULL;
+	}
+
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start(): Write detailmodel to prod_info end...");
+	return meta_result;
+
+Err:
+	if (sNVRAM_ReadCnf.buf != NULL)
+	{
+		free(sNVRAM_ReadCnf.buf);
+		sNVRAM_ReadCnf.buf = NULL;
+	}
+
+	if (pWriteData != NULL)
+	{
+		free(pWriteData);
+		pWriteData = NULL;
+	}
+
+	MTRACE_ERR(g_hEBOOT_DEBUG, "%s: fail! MetaResult = %s", pFuncName, ResultToString_SP(meta_result));
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start(): Write detailmodel to prod_info end...");
+	return meta_result;
+}
+//end add by wzb for write detaimodel to prodinfo addr offset 400 (0x190)
 
 META_RESULT SmartPhoneSN::REQ_WriteAP_PRODINFO_Start()
 {

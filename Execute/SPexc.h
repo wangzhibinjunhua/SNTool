@@ -75,6 +75,7 @@ protected:
 
     virtual META_RESULT ConductProdInfoData(unsigned char *pBuf, int nBufLen);
     virtual META_RESULT REQ_WriteAP_PRODINFO_Start();
+	virtual META_RESULT REQ_WriteDetailModel_WriteAP_PRODINFO_Start();//add by wzb
 	virtual META_RESULT ReadSN_From_PRODINFO();//add by wzb
 
     virtual META_RESULT REQ_ReadFromAPNVRAM(AP_FT_NVRAM_READ_REQ *psNVRAM_ReadReq, AP_FT_NVRAM_READ_CNF *psNVRAM_ReadCnf);
