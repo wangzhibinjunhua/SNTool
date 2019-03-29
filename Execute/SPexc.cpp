@@ -4346,14 +4346,22 @@ void SmartPhoneSN::ThreadMainEntryPoint()
             break;
         iTestCount++;
 
-        DebugOnOff(true);
-        MTRACE(g_hEBOOT_DEBUG, "------------------------------------ START -------------------------------------");
-        LogConfig();
+       // 开启记录log 移到snthread_init之后,获取sn之后 wzb
+		// DebugOnOff(true);
+       // MTRACE(g_hEBOOT_DEBUG, "------------------------------------ START -------------------------------------");
+       // LogConfig();
         bAnyOperationFail = false;
         UpdateMainDlgUI(false, NORMAL);
 
         //SPInit() can`t call before SNThread_Init() function
         SNThread_Init();
+
+		//============== 从上面移下来的
+		 DebugOnOff(true);
+		 MTRACE(g_hEBOOT_DEBUG, "------------------------------------ START -------------------------------------");
+		 LogConfig();
+//=========================
+
         //MTRACE (g_hEBOOT_DEBUG, "m_bWriteModemNvram = %d,m_sMdInfo.number_of_md = %d", m_bWriteModemNvram, m_sMdInfo.number_of_md);
         SPInit();
 

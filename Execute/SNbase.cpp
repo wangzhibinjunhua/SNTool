@@ -1026,10 +1026,13 @@ void SNBase::DebugOnOff(bool bOn)
         }
 
         ::GetLocalTime(&time);
-        sprintf_s(m_strLogDir_Sub, "%s%04u-%02u-%02u-%02u-%02u-%02u\\",
-            g_sMetaComm.strLogDir, time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
-
-        ret_i = ::CreateDirectory(m_strLogDir_Sub, NULL);
+		//modify by wzb for logdir add sn
+       // sprintf_s(m_strLogDir_Sub, "%s%04u-%02u-%02u-%02u-%02u-%02u\\",
+       //     g_sMetaComm.strLogDir, time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+		sprintf_s(m_strLogDir_Sub, "%s%04u-%02u-%02u-%02u-%02u-%02u-%s\\",
+			     g_sMetaComm.strLogDir, time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond,g_sMetaComm.sScanData.strBarcode);
+       //end
+		ret_i = ::CreateDirectory(m_strLogDir_Sub, NULL);
         if (ret_i == FALSE)
         {
             g_pMainDlg->MessageBox("Can not create default sub log dir.",
@@ -1278,7 +1281,9 @@ void SNBase::CustomInfo_Init()
 
 void SNBase::SNThread_Init()
 {
-    //Get main dialog handle
+    // 此函数内不要添加trace wzb
+	
+	//Get main dialog handle
     //g_pMainDlg = (CSNWriterDlg*)g_MainDlgHandle;
 
     m_Process = &(g_pMainDlg->m_ProgressSN);
