@@ -2841,7 +2841,16 @@ META_RESULT SmartPhoneSN::REQ_CountryCode_WriteAP_NVRAM_Start(char *pInData, uns
         goto Err;
     }
 
+	//check countrycode exist ////////
+	char ptmpCCFlag[2] = { 0 };
+	ptmpCCFlag[0] = sNVRAM_ReadCnf.buf[0xa];
+	ptmpCCFlag[1] = sNVRAM_ReadCnf.buf[0xa+1];
+	MTRACE(g_hEBOOT_DEBUG, "tmpCCFlag=%s", ptmpCCFlag);
+	if (ptmpCCFlag[0] != 0)
+	{
 
+	}
+	//end check countrycode exist ////////
    
     MTRACE (g_hEBOOT_DEBUG, "SNBase::ConductCountryCodeData(): Start Conduct wifi nvram data...!");
     pFuncName = "SNBase::ConductCountryCodeData()";
