@@ -259,6 +259,12 @@ void SNBase::UpdateUICountResult(WriteNvram_Status_e eWriteStatus)
     g_pMainDlg->SetDlgItemInt(IDC_COUNT_PASS, passNums, FALSE);
     g_pMainDlg->SetDlgItemInt(IDC_COUNT_FAIL, failNums, FALSE);
 
+	//add by wzb 
+	CString strOkPercent;
+	strOkPercent.Format("%.2f", (double)passNums / totalNums);
+	g_pMainDlg->SetDlgItemTextA(IDC_TV_TEST_OK_PERCENT2, strOkPercent);
+	//end
+
     UpdateMainDlgUI(true, eWriteStatus);
 }
 
