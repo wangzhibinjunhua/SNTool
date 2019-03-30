@@ -297,6 +297,15 @@ typedef struct {
 	char strDetailModel[64];
 	char strPhoneSN[64];
 	char strPhoneModel[64];
+	long lTimeStep1Start;
+	long lTimeStep1End;
+	long lTimeStep2End;
+	long lTimeStep3End;
+	long lTimeStep4End;
+	long lTimeStep5End;
+	long lTimeStep6End;
+	long lTimeStep7End;
+	long lTimeStep8End;
 	//end
 	
 } META_Common_struct;

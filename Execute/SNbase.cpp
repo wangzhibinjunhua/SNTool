@@ -195,6 +195,41 @@ int SNBase::UpdateUIMsg(const char * strMsg, ...)
 }
 
 //add by wzb for testitem info UI
+void  SNBase::UpdateTestItemTime(int type,long ms)
+{
+	CString strTimeSeconds;
+	strTimeSeconds.Format(_T("%.2f Ãë"), (double)ms / 1000);
+	switch (type)
+	{
+	case 1:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME1, strTimeSeconds);
+		break;
+	case 2:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME2, strTimeSeconds);
+		break;
+	case 3:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME3, strTimeSeconds);
+		break;
+	case 4:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME4, strTimeSeconds);
+		break;
+	case 5:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME5, strTimeSeconds);
+		break;
+	case 6:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME6, strTimeSeconds);
+		break;
+	case 7:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME7, strTimeSeconds);
+		break;
+	case 8:
+		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME8, strTimeSeconds);
+		break;
+	default:
+		break;
+	}
+
+}
 int SNBase::UpdateTestItemUIMsg(int type,const char * strMsg, ...)
 {
 	int iRet = 0;
@@ -245,6 +280,8 @@ void SNBase::UpdateUICountResult(WriteNvram_Status_e eWriteStatus)
     static UINT passNums = 0;
     static UINT failNums = 0;
 
+	static long avgTime = 0;//add by wzb
+
     // for the user click 'STOP' button before USB still not insert
     if (m_bStopBeforeUSBInsert == true)
         return;
@@ -263,6 +300,13 @@ void SNBase::UpdateUICountResult(WriteNvram_Status_e eWriteStatus)
 	CString strOkPercent;
 	strOkPercent.Format("%.2f", (double)passNums / totalNums);
 	g_pMainDlg->SetDlgItemTextA(IDC_TV_TEST_OK_PERCENT2, strOkPercent);
+	if (eWriteStatus == PASS)
+	{
+		avgTime += g_sMetaComm.lTimeStep8End - g_sMetaComm.lTimeStep1Start;
+		CString strAvgTime;
+		strAvgTime.Format(_T("%.2f Ãë"), (double)avgTime / 1000 / passNums);
+		g_pMainDlg->SetDlgItemTextA(IDC_TV_TEST_OK_TIME2, strAvgTime);
+	}
 	//end
 
     UpdateMainDlgUI(true, eWriteStatus);
@@ -1283,6 +1327,15 @@ void SNBase::CustomInfo_Init()
 	memset(g_sMetaComm.strDetailModel, 0, sizeof(g_sMetaComm.strDetailModel));
 	memset(g_sMetaComm.strPhoneSN, 0, sizeof(g_sMetaComm.strPhoneSN));
 	memset(g_sMetaComm.strPhoneModel, 0, sizeof(g_sMetaComm.strPhoneModel));
+	//g_sMetaComm.lTimeStep1Start = 0;
+	//g_sMetaComm.lTimeStep1End = 0;
+	//g_sMetaComm.lTimeStep2End = 0;
+	g_sMetaComm.lTimeStep3End = 0;
+	g_sMetaComm.lTimeStep4End = 0;
+	g_sMetaComm.lTimeStep5End = 0;
+	g_sMetaComm.lTimeStep6End = 0;
+	g_sMetaComm.lTimeStep7End = 0;
+	g_sMetaComm.lTimeStep8End = 0;
 }
 
 void SNBase::SNThread_Init()

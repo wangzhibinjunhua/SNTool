@@ -118,6 +118,9 @@ BOOL CScanData::OnInitDialog()
     CDialog::OnInitDialog();
     
     // TODO: Add extra initialization here
+	
+	g_sMetaComm.lTimeStep1Start = GetTickCount();//wzb record start time
+	
     
     m_ScanCancelBTN.SetShade(CShadeButtonST::SHS_SOFTBUMP);
     m_ScanOKBTN.SetShade(CShadeButtonST::SHS_SOFTBUMP);
@@ -422,10 +425,20 @@ void CScanData::OnKillfocusEsnData()
 void CScanData::OnBtnScanOk()
 {
     // TODO: Add your control notification handler code here
+	//add by wzb for init timeUI
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME1, 0);
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME2, 0);
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME3, 0);
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME4, 0);
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME5, 0);
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME6, 0);
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME7, 0);
+	g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_TIME8, 0);
+	//end
     UpdateData(TRUE);
     if (CheckAllScanData())
     {
-        CDialog::OnOK();
+		CDialog::OnOK();
     }
     else
     {

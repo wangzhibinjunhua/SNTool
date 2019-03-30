@@ -133,8 +133,6 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateProgress(0.25);
 	META_RESULT MetaResult = META_SUCCESS;
 
-	
-
 	//step 2 check SN //2222222222222222222222222222222222222222//////////
 	UpdateStatusProgress(4, 0.3, 0);
 	MetaResult = ReadSN_From_PRODINFO();
@@ -149,6 +147,8 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateTestItemUIMsg(4, "pass,phone SN is %s", g_sMetaComm.strPhoneSN);
 	UpdateProgress(0.5);
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check SN OK!");
+	g_sMetaComm.lTimeStep4End = GetTickCount();
+	UpdateTestItemTime(4, g_sMetaComm.lTimeStep4End - g_sMetaComm.lTimeStep3End);
 	//step 2 check SN end //222222222222222222222222222222222222222222222222//////////////
 	
 
@@ -175,6 +175,8 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateStatusProgress(5, 1.0, 1);
 	UpdateTestItemUIMsg(5, "pass phone model is %s", g_sMetaComm.strPhoneModel);
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check phone model ok");
+	g_sMetaComm.lTimeStep5End = GetTickCount();
+	UpdateTestItemTime(5, g_sMetaComm.lTimeStep5End - g_sMetaComm.lTimeStep4End);
 	//step 3 check phone detailmodel end //33333333333333333333333333333/////////////////////////////
 	UpdateProgress(0.75);
 
@@ -203,6 +205,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateStatusProgress(6, 1.0, 1);
 	UpdateTestItemUIMsg(6, "pass");
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode ok");
+	
 	//step 4 write country code end  //4444444444444444444444444444444444//////////////
 	UpdateProgress(0.85);
 
@@ -212,7 +215,8 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	{
 		return META_FAILED;
 	}
-
+	g_sMetaComm.lTimeStep6End = GetTickCount();
+	UpdateTestItemTime(6, g_sMetaComm.lTimeStep6End - g_sMetaComm.lTimeStep5End);
 	//end step 5 write detailmodel to proinfo //5555555555555555////////////////
 
 
@@ -228,6 +232,8 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	}
 	UpdateStatusProgress(8, 1.0, 1);
 	UpdateTestItemUIMsg(8, "pass");
+	g_sMetaComm.lTimeStep7End = GetTickCount();
+	UpdateTestItemTime(8, g_sMetaComm.lTimeStep7End - g_sMetaComm.lTimeStep6End);
 	//end step 6 upload data to sql server //////6666666666666666666666666666////////////////
 	
 	MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() end...");
@@ -4118,6 +4124,8 @@ META_RESULT SmartPhoneSN::EnterAPMetaMode()
 		//add by wzb
 		UpdateStatusProgress(3,1.0,1);
 		g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO3, "已连接");
+		g_sMetaComm.lTimeStep3End = GetTickCount();
+		UpdateTestItemTime(3, g_sMetaComm.lTimeStep3End - g_sMetaComm.lTimeStep2End);
     }
     else
     {
@@ -4336,7 +4344,7 @@ void SmartPhoneSN::ThreadMainEntryPoint()
         *m_pMetaStopFlag = BOOT_STOP;
     }
     MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::MetaHandle_Init() end...");
-
+	
     CScanData scanDlg;
 
     while(true)
@@ -4354,7 +4362,9 @@ void SmartPhoneSN::ThreadMainEntryPoint()
             ::AfxMessageBox(_T("Start write next devices ?"), MB_YESNO|MB_ICONQUESTION) != IDYES)
             break;
         iTestCount++;
-
+		//AfxMessageBox("testtaaaaaaa");
+		g_sMetaComm.lTimeStep1End = GetTickCount();
+		UpdateTestItemTime(2, g_sMetaComm.lTimeStep1End - g_sMetaComm.lTimeStep1Start);
        // 开启记录log 移到snthread_init之后,获取sn之后 wzb
 		// DebugOnOff(true);
        // MTRACE(g_hEBOOT_DEBUG, "------------------------------------ START -------------------------------------");
@@ -4376,6 +4386,7 @@ void SmartPhoneSN::ThreadMainEntryPoint()
 
 		//add by wzb 
 		//step 1 select smo //1111111111111111111111111111//////////////////////
+		
 		UpdateStatusProgress(1, 0.3, 0);
 		int iRet = SelectSMOInfo();
 		if (iRet != META_SUCCESS)
@@ -4401,6 +4412,8 @@ void SmartPhoneSN::ThreadMainEntryPoint()
 				UpdateTestItemUIMsg(1, "%s,%s", g_sMetaComm.strCCFlag, g_sMetaComm.strDetailModel);
 			}
 		}
+		g_sMetaComm.lTimeStep2End = GetTickCount();
+		UpdateTestItemTime(1, g_sMetaComm.lTimeStep2End - g_sMetaComm.lTimeStep1End);
 		//step 1 elect smo end //1111111111111111111111111111//////////////////////
 		//end
 
@@ -4594,6 +4607,8 @@ End:
 				//add by wzb
 				UpdateStatusProgress(7,1.0,1);
 				g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO7, "pass");
+				g_sMetaComm.lTimeStep8End = GetTickCount();
+				UpdateTestItemTime(7, g_sMetaComm.lTimeStep8End - g_sMetaComm.lTimeStep7End);
             }
 
             //The backup nvram api return success, but the operator pull up usb cable immediately before all operation successfully.

@@ -111,6 +111,7 @@ protected:
     virtual bool CheckCalFinalTestStatus(const char* strBarcode);
     virtual void PopupMsgBox(const char* strTilte, UINT uType, const char* strMsg, ...);
     virtual bool NeedScanData();
+	virtual void UpdateTestItemTime(int type, long ms);//wzb
 
     void DebugOnOff(bool bOn);
     // mdindex base 0
