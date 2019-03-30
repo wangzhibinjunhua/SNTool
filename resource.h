@@ -31,6 +31,7 @@
 #define IDC_COMBO_COMPORT               1007
 #define IDC_COMBO_TARGET_TYPE           1008
 #define IDC_MD_1_DBFILE_PATH            1009
+#define IDC_TOOL_CUSTOM_TITLE           20092
 #define IDC_MD_2_DBFILE_PATH            1010
 #define IDC_AP_DBFILE_PATH              1011
 #define IDC_BTN_MD1                     1012

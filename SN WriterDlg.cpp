@@ -29,7 +29,10 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "写国家码工具 V1.1.270319";//
+const char *g_strToolVersion = "国家码工具 V1.1.270319";//
+const char *g_strToolVersionNo = "V1.1.270319";
+const char *g_strToolWrite = "写国家码工具";
+const char *g_strToolDelete = "删除国家码工具";
 //add by wzb
 int iDateLimit = 190427;//版本号和限制时间同步修改
 //end
@@ -387,6 +390,14 @@ void CSNWriterDlg::HideSomeUIItem()
 	m_SNMenu.RemoveMenu(0, MF_BYPOSITION);
 	m_SNMenu.RemoveMenu(0, MF_BYPOSITION);
 	m_SNMenu.RemoveMenu(0, MF_BYPOSITION);
+
+	//for show title
+	CString strTitle;
+	strTitle.Format(_T("%s    %s ") ,g_strToolWrite, g_strToolVersionNo);
+	CFont mFont;
+	mFont.CreatePointFont(400, _T("宋体"));
+	GetDlgItem(IDC_TOOL_CUSTOM_TITLE)->SetWindowText(strTitle);
+	GetDlgItem(IDC_TOOL_CUSTOM_TITLE)->SetFont(&mFont);
 }
 
 //end
