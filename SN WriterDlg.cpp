@@ -718,7 +718,8 @@ void CSNWriterDlg::OnAboutSn()
 {
     // TODO: Add your command handler code here
    //add by wzb for test
-	if (1)
+#if 0
+	if(0)
 	{
 		char SetupDir[512];
 		GetCurrentDirectory(512, SetupDir);
@@ -747,6 +748,8 @@ void CSNWriterDlg::OnAboutSn()
 		//buffer[bufSize] = 0;
 		file.Close();
 	}
+#endif
+#if 0
 	if (0)
 	{
 		OleEnvInit();
@@ -758,6 +761,7 @@ void CSNWriterDlg::OnAboutSn()
 		UploadDataToSql();
 		return;
 	}
+#endif
 	//end
 	
 	CAboutSNDlg dlg;
