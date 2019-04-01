@@ -17,6 +17,7 @@
 #include "SNBase.h"
 #include "HdcpEncryption.h"
 
+#include "Base64Encode.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -717,6 +718,35 @@ void CSNWriterDlg::OnAboutSn()
 {
     // TODO: Add your command handler code here
    //add by wzb for test
+	if (1)
+	{
+		char SetupDir[512];
+		GetCurrentDirectory(512, SetupDir);
+		sprintf(SetupDir, "%s\\WDATA", SetupDir);
+		CFile file;
+		if (!file.Open(SetupDir, CFile::modeReadWrite))
+			return;
+		//if (!file.Open(SetupDir, CFile::modeReadWrite | CFile::modeCreate))
+		//	return;
+		//file.SeekToBegin();
+		file.Seek(6, CFile::begin);
+		int bufSize = 0;
+		char buffer[10240];
+		char *pw = "123456";
+		//file.Read(&bufSize, 4);
+		CString str;
+		str.Format("%s", pw);
+		AfxMessageBox(str);
+		CEncode mCEnocde;
+		CString str1=mCEnocde.base64encode(str,strlen(str));
+		AfxMessageBox(str1);
+		char pStrWrite[7] = { 0 };
+		memcpy(pStrWrite, (char*)(LPCTSTR)str1, 6);
+		file.Write(pStrWrite, 6);
+		//file.Read(buffer, bufSize);
+		//buffer[bufSize] = 0;
+		file.Close();
+	}
 	if (0)
 	{
 		OleEnvInit();

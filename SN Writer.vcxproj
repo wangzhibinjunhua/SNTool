@@ -119,6 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Base64Encode.cpp" />
     <ClCompile Include="Common\Common.cpp" />
     <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="Execute\SNbase.cpp" />
@@ -146,6 +147,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base64Encode.h" />
     <ClInclude Include="Common\Common.h" />
     <ClInclude Include="Encryption.h" />
     <ClInclude Include="Execute\SNbase.h" />

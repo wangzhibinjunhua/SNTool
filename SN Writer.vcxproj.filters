@@ -180,6 +180,9 @@
     <ClCompile Include="Extra\CBtnST\ShadeButtonST.cpp">
       <Filter>Source Files\Extra_SRC\BtnST_SRC</Filter>
     </ClCompile>
+    <ClCompile Include="Base64Encode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Encryption.h">
@@ -316,6 +319,9 @@
     </ClInclude>
     <ClInclude Include="Extra\CBtnST\ShadeButtonST.h">
       <Filter>Header Files\Extra_HDR\BtnST_HDR</Filter>
+    </ClInclude>
+    <ClInclude Include="Base64Encode.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
