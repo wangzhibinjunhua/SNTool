@@ -4,4 +4,6 @@ temp/
 ipch/
 *.VC.VC.opendb
 *.VC.db
-
+Output/CountryCodeTool.exe
+Output/CountryCodeTool.iobj
+Output/CountryCodeTool.ipdb
