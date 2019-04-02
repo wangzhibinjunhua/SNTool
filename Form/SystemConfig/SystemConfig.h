@@ -56,6 +56,11 @@ public:
     BOOL	m_bThreeIMEI;
     BOOL	m_bCheckWifiHD;
     BOOL	m_bWriteBarc;
+	//add by wzb 
+	BOOL	m_bBatteryCheck;
+	BOOL	m_bFactoryresetCheck;
+	BOOL	m_bModelDetailsCheck;
+	//end
     BOOL	m_bWriteBTAddr;
     BOOL	m_bWriteIMEI;
     BOOL	m_bWriteWifi;
@@ -107,6 +112,11 @@ protected:
     afx_msg void OnThreeImei();
     afx_msg void OnWifiHeaderCheck();
     afx_msg void OnWriteBarcCheck();
+	//add by wzb 
+	afx_msg void OnBatteryCheck();
+	afx_msg void OnFactoryresetCheck();
+	afx_msg void OnModelDetailsCheck();
+	//end
     afx_msg void OnWriteBtCheck();
     afx_msg void OnWriteImeiCheck();
     afx_msg void OnWriteWifiCheck();

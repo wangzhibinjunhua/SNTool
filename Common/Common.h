@@ -306,6 +306,9 @@ typedef struct {
 	long lTimeStep6End;
 	long lTimeStep7End;
 	long lTimeStep8End;
+	bool bBatteryCheck;
+	bool bFactoryresetCheck;
+	bool bModelDetailsCheck;
 	//end
 	
 } META_Common_struct;

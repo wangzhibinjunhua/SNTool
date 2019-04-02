@@ -152,6 +152,12 @@ IniData_struct g_IniData[] =
     {"Log Dir", (char*)g_sMetaComm.strLogDir, INI_STRING},
     {"ModemLog", (bool *)&g_sMetaComm.bMDLog, INI_BOOLEAN},
 
+	//add by wzb for battery factoryreset modeldetail check
+	{ "Battery Check", (bool*)&g_sMetaComm.bBatteryCheck, INI_BOOLEAN },
+	{ "Factoryreset Check", (bool*)&g_sMetaComm.bFactoryresetCheck, INI_BOOLEAN },
+	{ "ModelDetails Check", (bool*)&g_sMetaComm.bModelDetailsCheck, INI_BOOLEAN },
+	//end
+
     //for C2K
     {"Enable Serial No", (bool*)&g_sMetaComm.EnableSerialNo, INI_BOOLEAN},
     {"Ignore Database Inconsistent", (bool*)&g_sMetaComm.IgnoreDBInconsistent, INI_BOOLEAN},

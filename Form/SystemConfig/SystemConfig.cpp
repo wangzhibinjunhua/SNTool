@@ -100,6 +100,11 @@ void CSystemConfig::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_THREE_IMEI, m_bThreeIMEI);
     DDX_Check(pDX, IDC_WIFI_HEADER_CHECK, m_bCheckWifiHD);
     DDX_Check(pDX, IDC_WRITE_BARC_CHECK, m_bWriteBarc);
+	//add by wzb
+	DDX_Check(pDX, IDC_CHECK_BATTERY, m_bBatteryCheck);
+	DDX_Check(pDX, IDC_CHECK_FACTORYRESET, m_bFactoryresetCheck);
+	DDX_Check(pDX, IDC_CHECK_MODELDETAILS, m_bModelDetailsCheck);
+	//end
     DDX_Check(pDX, IDC_WRITE_BT_CHECK, m_bWriteBTAddr);
     DDX_Check(pDX, IDC_WRITE_IMEI_CHECK, m_bWriteIMEI);
     DDX_Check(pDX, IDC_WRITE_WIFI_CHECK, m_bWriteWifi);
@@ -148,6 +153,11 @@ BEGIN_MESSAGE_MAP(CSystemConfig, CDialog)
     ON_BN_CLICKED(IDC_THREE_IMEI, OnThreeImei)
     ON_BN_CLICKED(IDC_WIFI_HEADER_CHECK, OnWifiHeaderCheck)
     ON_BN_CLICKED(IDC_WRITE_BARC_CHECK, OnWriteBarcCheck)
+	//add by wzb
+	ON_BN_CLICKED(IDC_CHECK_BATTERY, OnBatteryCheck)
+	ON_BN_CLICKED(IDC_CHECK_FACTORYRESET, OnFactoryresetCheck)
+	ON_BN_CLICKED(IDC_CHECK_MODELDETAILS, OnModelDetailsCheck)
+	//end
     ON_BN_CLICKED(IDC_WRITE_BT_CHECK, OnWriteBtCheck)
     ON_BN_CLICKED(IDC_WRITE_IMEI_CHECK, OnWriteImeiCheck)
     ON_BN_CLICKED(IDC_WRITE_WIFI_CHECK, OnWriteWifiCheck)
@@ -495,6 +505,35 @@ void CSystemConfig::OnThreeImei()
     }
 }
 
+//add by wzb for battery check,factoryreset check detailmodel check
+
+void CSystemConfig::OnBatteryCheck()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	g_sMetaComm.bBatteryCheck = (m_bBatteryCheck == TRUE);
+	
+}
+
+void CSystemConfig::OnFactoryresetCheck()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	g_sMetaComm.bFactoryresetCheck = (m_bFactoryresetCheck == TRUE);
+
+}
+
+void CSystemConfig::OnModelDetailsCheck()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	g_sMetaComm.bModelDetailsCheck = (m_bModelDetailsCheck == TRUE);
+
+}
+
+
+//end add by wzb for battery check,factoryreset check detailmodel check
+
 
 void CSystemConfig::OnWriteBarcCheck()
 {
@@ -748,6 +787,12 @@ void CSystemConfig::UpdateConfigUIOption()
     m_strMD_1_DBPath = g_sMetaComm.sDBFileOption.strMD1Dbpath;
     m_strMD_2_DBPath = g_sMetaComm.sDBFileOption.strMD2Dbpath;
     m_strAPDbPath    = g_sMetaComm.sDBFileOption.strAPDbpath;
+
+	//add by wzb
+	m_bBatteryCheck = g_sMetaComm.bBatteryCheck;
+	m_bFactoryresetCheck = g_sMetaComm.bFactoryresetCheck;
+	m_bModelDetailsCheck = g_sMetaComm.bModelDetailsCheck;
+	//end
 
     m_bWriteBarc     = g_sMetaComm.sWriteOption.bWriteBarcode;
     m_bWriteIMEI     = g_sMetaComm.sWriteOption.bWriteIMEI;
