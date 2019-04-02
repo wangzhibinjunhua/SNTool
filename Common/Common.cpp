@@ -817,12 +817,12 @@ int SelectSqlByType(int type)
 		if (!pRecordset->GetadoEOF())
 		{
 			iRet = SN_TPCONTROL_EXIST;
-			AfxMessageBox("sn tpcontrol exist");
+			//AfxMessageBox("sn tpcontrol exist");
 		}
 		else
 		{
 			iRet = SN_TPCONTROL_NONE;
-			AfxMessageBox("sn tpcontrol none");
+			//AfxMessageBox("sn tpcontrol none");
 		}
 		break;
 	case SELECT_TPINPUT:
@@ -833,7 +833,7 @@ int SelectSqlByType(int type)
 		}
 		else
 		{
-			iRet = SN_TPINPUT_EXIST;
+			iRet = SN_TPINPUT_NONE;
 			//AfxMessageBox("sn tpinput none");
 		}
 		break;

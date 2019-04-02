@@ -111,7 +111,19 @@ META_RESULT SmartPhoneSN::SelectSMOInfo()
 {
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::SelectSMOInfo() start...");
 	OleEnvInit();
-	int iRet = SelectSqlByType(SELECT_TPPLAN);
+	int iRet = 0;
+	iRet = SelectSqlByType(SELECT_TPCONTROL);
+	if (iRet != SN_TPCONTROL_NONE)
+	{
+		return (META_RESULT)iRet;
+	}
+
+	iRet = SelectSqlByType(SELECT_TPINPUT);
+	if (iRet != SN_TPINPUT_EXIST)
+	{
+		return (META_RESULT)iRet;
+	}
+	iRet = SelectSqlByType(SELECT_TPPLAN);
 	if (iRet==SELECT_SMO_OK)
 	{
 		return META_SUCCESS;
@@ -120,6 +132,7 @@ META_RESULT SmartPhoneSN::SelectSMOInfo()
 	{
 		return META_FAILED;
 	}
+	return META_SUCCESS;
 
 }
 //end
@@ -4391,9 +4404,22 @@ void SmartPhoneSN::ThreadMainEntryPoint()
 		int iRet = SelectSMOInfo();
 		if (iRet != META_SUCCESS)
 		{
-			AfxMessageBox(_T("查询SMO错误"));
+			if (iRet == SN_TPCONTROL_EXIST)
+			{
+				AfxMessageBox(_T("SN 处于管控名单不可写国家码操作"));
+			}
+			else if (iRet == SN_TPINPUT_NONE)
+			{
+				AfxMessageBox(_T("SN 不在入库名单不可写国家码操作"));
+			}
+			else
+			{
+				AfxMessageBox(_T("查询SMO错误"));
+			}
 			UpdateStatusProgress(1, 1.0, 0);
 			g_pMainDlg->SetDlgItemText(IDC_TV_TESTITEM_INFO1, "fail");
+			bAnyOperationFail = true;
+			goto End;
 			
 		}
 		else
