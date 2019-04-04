@@ -167,27 +167,31 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 
 	//step 3 check phone detailmodel //333333333333333333333333333333333333//////////
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()get phone model start");
-	char *pPropertyModel = "ro.product.model";
-	int iPropertyModelLen = strlen(pPropertyModel);
-	unsigned char pDatainPropertyModel[32] = { 0 };
-	memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
-	unsigned char pRev[64] = { 0 };
-	MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyModel, iPropertyModelLen, pRev, 64);
-	if (MetaResult != META_SUCCESS)
+	if (g_sMetaComm.bModelDetailsCheck)
 	{
-		return MetaResult;
-	}
-	memcpy(g_sMetaComm.strPhoneModel, pRev, 64);
-	UpdateStatusProgress(5, 0.5, 0);
-	if (strncmp(g_sMetaComm.strDetailModel, g_sMetaComm.strPhoneModel, 6) !=0)
-	{
-		UpdateTestItemUIMsg(5, "fail phone model is %s", g_sMetaComm.strPhoneModel);
-		UpdateStatusProgress(5, 1.0, 0);
-		return META_FAILED;
+		char *pPropertyModel = "ro.product.model";
+		int iPropertyModelLen = strlen(pPropertyModel);
+		unsigned char pDatainPropertyModel[32] = { 0 };
+		memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
+		unsigned char pRev[64] = { 0 };
+		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyModel, iPropertyModelLen, pRev, 64);
+		if (MetaResult != META_SUCCESS)
+		{
+			return MetaResult;
+		}
+		memcpy(g_sMetaComm.strPhoneModel, pRev, 64);
+		UpdateStatusProgress(5, 0.5, 0);
+		if (strncmp(g_sMetaComm.strDetailModel, g_sMetaComm.strPhoneModel, 6) != 0)
+		{
+			UpdateTestItemUIMsg(5, "fail phone model is %s", g_sMetaComm.strPhoneModel);
+			UpdateStatusProgress(5, 1.0, 0);
+			return META_FAILED;
+		}
+		
+		UpdateTestItemUIMsg(5, "pass phone model is %s", g_sMetaComm.strPhoneModel);
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check phone model ok");
 	}
 	UpdateStatusProgress(5, 1.0, 1);
-	UpdateTestItemUIMsg(5, "pass phone model is %s", g_sMetaComm.strPhoneModel);
-	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check phone model ok");
 	g_sMetaComm.lTimeStep5End = GetTickCount();
 	UpdateTestItemTime(5, g_sMetaComm.lTimeStep5End - g_sMetaComm.lTimeStep4End);
 	//step 3 check phone detailmodel end //33333333333333333333333333333/////////////////////////////
@@ -248,6 +252,44 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	g_sMetaComm.lTimeStep7End = GetTickCount();
 	UpdateTestItemTime(8, g_sMetaComm.lTimeStep7End - g_sMetaComm.lTimeStep6End);
 	//end step 6 upload data to sql server //////6666666666666666666666666666////////////////
+
+
+	//step 7 check factory reset ////7777777777777777777777////////////////
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check factoryreset bFactoryresetCheck=%d", g_sMetaComm.bFactoryresetCheck? 1:0);
+	if (g_sMetaComm.bFactoryresetCheck)
+	{
+		char *pPropertyReset = "persist.custom.setup";
+		int iPropertyResetLen = strlen(pPropertyReset);
+		unsigned char pDatainPropertyReset[32] = { 0 };
+		memcpy(pDatainPropertyReset, pPropertyReset, iPropertyResetLen);
+		unsigned char pRev[64] = { 0 };
+		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyReset, iPropertyResetLen, pRev, 64);
+		if (MetaResult != META_SUCCESS)
+		{
+			return MetaResult;
+		}
+		
+		if (pRev[0] == 49)
+		{
+			//factory reset
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() factory reset start...");
+			
+			EMMC_CLEAR_CNF_S emmcCnf;
+			memset(&emmcCnf, 0, sizeof(EMMC_CLEAR_CNF_S));
+			MetaResult = SP_META_ClearValue_r(m_hSPMetaHandle, 20000, &emmcCnf);
+			UpdateUIMsg("emmc clear status=%d", emmcCnf.status);
+			if (MetaResult != META_SUCCESS)
+			{
+				MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() factory reset error");
+				return MetaResult;
+			}
+		}
+		else
+		{
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() do not need factory reset");
+		}
+	}
+	//end step 7 check factory reset ////7777777777777777777777////////////////
 	
 	MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() end...");
 	return META_SUCCESS;
@@ -2861,7 +2903,7 @@ META_RESULT SmartPhoneSN::REQ_CountryCode_WriteAP_NVRAM_Start(char *pInData, uns
     }
 
 	//check countrycode exist ////////
-	char ptmpCCFlag[2] = { 0 };
+	char ptmpCCFlag[3] = { 0 };
 	ptmpCCFlag[0] = sNVRAM_ReadCnf.buf[0xa];
 	ptmpCCFlag[1] = sNVRAM_ReadCnf.buf[0xa+1];
 	MTRACE(g_hEBOOT_DEBUG, "tmpCCFlag=%s", ptmpCCFlag);
