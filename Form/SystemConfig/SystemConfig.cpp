@@ -4,7 +4,7 @@
 #include "SN Writer.h"
 #include "SN WriterDlg.h"
 #include "SystemConfig.h"
-
+#include "ChgPasswdDlg.h"
 #include <shlwapi.h>
 
 #ifdef _DEBUG
@@ -131,6 +131,7 @@ void CSystemConfig::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_BTN_AP, m_Load_APDB_BTN);
     DDX_Control(pDX, IDC_BTN_LOG, m_LogDir_BTN);
     DDX_Control(pDX, IDC_BTN_SAVE, m_SaveBTN);
+	DDX_Control(pDX, IDC_BTN_CHANGEPW, m_ChangePWBTN);//add by wzb
 }
 
 
@@ -162,6 +163,7 @@ BEGIN_MESSAGE_MAP(CSystemConfig, CDialog)
     ON_BN_CLICKED(IDC_WRITE_IMEI_CHECK, OnWriteImeiCheck)
     ON_BN_CLICKED(IDC_WRITE_WIFI_CHECK, OnWriteWifiCheck)
     ON_BN_CLICKED(IDC_BTN_SAVE, OnBtnSave)
+	ON_BN_CLICKED(IDC_BTN_CHANGEPW, OnBtnChangePW)//add by wzb
     ON_BN_CLICKED(IDC_WRITE_ETHERNET_MAC_CHECK, OnWriteEthernetMacCheck)
     ON_BN_CLICKED(IDC_WRITE_DRMKEY_MCID_CHECK, OnWriteDrmkeyMcidCheck)
     ON_BN_CLICKED(IDC_DRMKEY_MCID_HEADER_CHECK, OnDrmkeyMcidHeaderCheck)
@@ -193,6 +195,7 @@ BOOL CSystemConfig::OnInitDialog()
     m_Load_APDB_BTN.SetShade(CShadeButtonST::SHS_SOFTBUMP);
     m_LogDir_BTN.SetShade(CShadeButtonST::SHS_SOFTBUMP);
     m_SaveBTN.SetShade(CShadeButtonST::SHS_SOFTBUMP);
+	m_ChangePWBTN.SetShade(CShadeButtonST::SHS_SOFTBUMP);//add by wzb
 
     if (g_sMetaComm.eTargetType == SMART_PHONE_DUALMODEM)
     {
@@ -932,6 +935,13 @@ void CSystemConfig::OnBtnSave()
     g_sMetaComm.sIMEIOption.bLockOtp = ((CButton *)GetDlgItem(IDC_LOCK_OTP))->GetCheck() == BST_CHECKED;
 
     CDialog::OnOK();
+}
+
+//add by wzb
+void CSystemConfig::OnBtnChangePW()
+{
+	CChgPasswdDlg dlg;
+	dlg.DoModal();
 }
 
 void CSystemConfig::OnWriteEthernetMacCheck()

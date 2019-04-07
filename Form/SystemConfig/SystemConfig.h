@@ -122,6 +122,7 @@ protected:
     afx_msg void OnWriteWifiCheck();
     virtual BOOL OnInitDialog();
     afx_msg void OnBtnSave();
+	afx_msg void OnBtnChangePW();//add by wzb
     afx_msg void OnWriteEthernetMacCheck();
     afx_msg void OnWriteDrmkeyMcidCheck();
     afx_msg void OnDrmkeyMcidHeaderCheck();
@@ -152,7 +153,7 @@ private:
     CShadeButtonST m_Load_APDB_BTN;
     CShadeButtonST m_LogDir_BTN;
     CShadeButtonST m_SaveBTN;
-
+	CShadeButtonST m_ChangePWBTN;//add by wzb
     CToolTipCtrl * m_pToolTip;
 
 };

@@ -6,7 +6,7 @@
 #include "VerifyPasswdDlg.h"
 #include "des.h"
 #include "Common.h"
-
+#include "Base64Encode.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -50,7 +50,42 @@ bool CVerifyPasswdDlg::IsVerifyPasswdPass()
 {
     UpdateData(TRUE);
     
-    BYTE key[10]="03055030";    
+   //modify by wzb for systemconfig password
+#if 1 //new password wdata
+	char SetupDir[512];
+	GetCurrentDirectory(512, SetupDir);
+	sprintf(SetupDir, "%s\\WDATA", SetupDir);
+	CFile file;
+	if (!file.Open(SetupDir, CFile::modeReadWrite))
+	{
+		AfxMessageBox(_T("ÅäÖÃÎÄ¼þËð»µ!\r\n ´íÎó´úÂë0x0x100019"));
+		return false;
+	}
+	file.Seek(6, CFile::begin);
+	char buffer[16] = {0};
+	file.Read(buffer, 8);
+	file.Close();
+	CString tmpStr;
+	tmpStr.Format(_T("%s"), buffer);
+	CEncode mCEnocde;
+	CString strInputPw = mCEnocde.base64encode(m_strOldPasswd, strlen(m_strOldPasswd));
+	if (tmpStr != strInputPw)
+	{
+		m_strOldPasswd = "";
+		UpdateData(FALSE);
+		MessageBox("Incorrect old password, please try again!", "Warning", MB_ICONWARNING);
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+
+	return false;
+#endif
+
+#if 0 
+	BYTE key[10]="03055030";    
     BYTE strPassword[LOGIN_PASSWORD_MAX] = {0};
     BYTE *pOldPasswd = strPassword;
     Login_Identify_e Identify = UNKNOW_IDENTIFY;
@@ -76,6 +111,10 @@ bool CVerifyPasswdDlg::IsVerifyPasswdPass()
     {
         return false;
     }
+
+#endif
+
+	//end modify by wzb for systemconfig password
 }
 
 void CVerifyPasswdDlg::OnBtnVerifyOk() 

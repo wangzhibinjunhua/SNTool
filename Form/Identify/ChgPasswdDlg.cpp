@@ -5,7 +5,7 @@
 #include "SN Writer.h"
 #include "ChgPasswdDlg.h"
 #include "des.h"
-
+#include "Base64Encode.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -67,7 +67,34 @@ void CChgPasswdDlg::OnChgPasswdOk()
     {
         if(ConfirmNewPasswd())
         {
-            LPTSTR lpPasswd =(LPTSTR)(LPCTSTR)m_strNewPasswd;
+			//modify by wzb
+#if 1
+			char SetupDir[512];
+			GetCurrentDirectory(512, SetupDir);
+			sprintf(SetupDir, "%s\\WDATA", SetupDir);
+			CFile file;
+			if (!file.Open(SetupDir, CFile::modeReadWrite))
+			{
+				AfxMessageBox(_T("ÅäÖÃÎÄ¼þËð»µ!\r\n ´íÎó´úÂë0x0x100019"));
+				CDialog::OnOK();
+			}
+			else 
+			{
+				//AfxMessageBox(m_strNewPasswd);
+				CEncode mCEnocde;
+				CString str1 = mCEnocde.base64encode(m_strNewPasswd, strlen(m_strNewPasswd));
+				//AfxMessageBox(str1);
+				char pStrWrite[10] = { 0 };
+				memcpy(pStrWrite, (char*)(LPCTSTR)str1, 8);
+				file.Seek(6, CFile::begin);
+				file.Write(pStrWrite, 8);
+				file.Close();
+				MessageBox("Change passwd success!", "Change Passwd", MB_OK);
+				CDialog::OnOK();
+			}
+#endif
+#if 0
+			LPTSTR lpPasswd =(LPTSTR)(LPCTSTR)m_strNewPasswd;
             if(SaveLoginPasswd(lpPasswd))
             {
                 MessageBox("Change passwd success!", "Change Passwd", MB_OK);
@@ -79,7 +106,8 @@ void CChgPasswdDlg::OnChgPasswdOk()
                 lpPasswd =(LPTSTR)(LPCTSTR)m_strOldPasswd;
                 SaveLoginPasswd(lpPasswd);
                 CDialog::OnOK();
-            }            
+            }   
+#endif
         }
         else
         {
@@ -95,7 +123,40 @@ void CChgPasswdDlg::OnChgPasswdOk()
 bool CChgPasswdDlg::VerifyOldPasswd()
 {
     UpdateData(TRUE);
+	//modify by wzb
+#if 1 //new password wdata
+	char SetupDir[512];
+	GetCurrentDirectory(512, SetupDir);
+	sprintf(SetupDir, "%s\\WDATA", SetupDir);
+	CFile file;
+	if (!file.Open(SetupDir, CFile::modeReadWrite))
+	{
+		AfxMessageBox(_T("ÅäÖÃÎÄ¼þËð»µ!\r\n ´íÎó´úÂë0x0x100019"));
+		return false;
+	}
+	file.Seek(6, CFile::begin);
+	char buffer[16] = { 0 };
+	file.Read(buffer, 8);
+	file.Close();
+	CString tmpStr;
+	tmpStr.Format(_T("%s"), buffer);
+	CEncode mCEnocde;
+	CString strInputPw = mCEnocde.base64encode(m_strOldPasswd, strlen(m_strOldPasswd));
+	if (tmpStr != strInputPw)
+	{
+		m_strOldPasswd = "";
+		UpdateData(FALSE);
+		MessageBox("Incorrect old password, please try again!", "Warning", MB_ICONWARNING);
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 
+	return false;
+#endif
+#if 0
     BYTE key[10]="03055030";    
     BYTE strPassword[LOGIN_PASSWORD_MAX] = {0};
     BYTE *pOldPasswd = strPassword;
@@ -122,6 +183,8 @@ bool CChgPasswdDlg::VerifyOldPasswd()
     {
         return false;
     }
+#endif 
+	//end
 }
 
 bool CChgPasswdDlg::ConfirmNewPasswd()
@@ -131,6 +194,13 @@ bool CChgPasswdDlg::ConfirmNewPasswd()
         return false;
     }
 
+	//add by wzb limit password len 6
+	if (m_strNewPasswd.GetLength() != 6 || m_strConfirmPasswd.GetLength() != 6)
+	{
+		MessageBox("password length must be 6!!", "Warning", MB_ICONWARNING);
+		return false;
+	}
+	//end
     if (m_strNewPasswd != m_strConfirmPasswd)
     {
         return false;

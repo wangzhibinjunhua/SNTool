@@ -652,8 +652,16 @@ BOOL CSNWriterDlg::DestroyWindow()
 void CSNWriterDlg::OnBtnSysconfig()
 {
     // TODO: Add your control notification handler code here
-    CSystemConfig dlg;
-    dlg.DoModal();
+	//add by wzb for systemconfig password
+	CVerifyPasswdDlg dlg1;
+	if (IDOK == dlg1.DoModal())
+	{
+		CSystemConfig dlg;
+		 dlg.DoModal();
+	}
+	//end
+    //CSystemConfig dlg;
+   // dlg.DoModal();
 }
 
 void CSNWriterDlg::OnSelchangeComboComport()
@@ -741,9 +749,9 @@ void CSNWriterDlg::OnAboutSn()
 		CEncode mCEnocde;
 		CString str1=mCEnocde.base64encode(str,strlen(str));
 		AfxMessageBox(str1);
-		char pStrWrite[7] = { 0 };
-		memcpy(pStrWrite, (char*)(LPCTSTR)str1, 6);
-		file.Write(pStrWrite, 6);
+		char pStrWrite[10] = { 0 };
+		memcpy(pStrWrite, (char*)(LPCTSTR)str1, 8);
+		file.Write(pStrWrite, 8);
 		//file.Read(buffer, bufSize);
 		//buffer[bufSize] = 0;
 		file.Close();

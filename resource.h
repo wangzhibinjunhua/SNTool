@@ -70,24 +70,17 @@
 #define IDC_ETHERNET_HEADER_CHECK       1048
 #define IDC_ETHERNET_HEADER_STR         1049
 #define IDC_BARCODE_DATA                1050
-#define IDC_CHECK_MODELDETAILS          10501
 #define IDC_WRITE_DRMKEY_MCID_CHECK     1051
 #define IDC_BT_DATA                     1052
-#define IDC_WRITE_MEID_CHECK            10521
 #define IDC_DRMKEY_MCID_HEADER_CHECK    1053
 #define IDC_WIFI_DATA                   1054
-#define IDC_WRITE_ESN_CHECK             10541
 #define IDC_DRMKEY_MCID_HEADER_STR      1055
 #define IDC_IMEI_1_DATA                 1056
-#define IDC_MEID_HEADER_STR             10561
 #define IDC_SERIAL_NO_HEADER_CHECK      1057
 #define IDC_IMEI_2_DATA                 1058
-#define IDC_ESN_HEADER_STR              10581
 #define IDC_SERIAL_NO_HEADER_STR        1059
 #define IDC_IMEI_3_DATA                 1060
-#define IDC_MEID_HEADER_CHECK           10601
 #define IDC_IMEI_4_DATA                 1061
-#define IDC_ESN_HEADER_CHECK            10611
 #define IDC_BARC_HEADER_SCAN            1062
 #define IDC_BT_HEADER_SCAN              1063
 #define IDC_WIFI_HEADER_SCAN            1064
@@ -105,15 +98,12 @@
 #define IDC_DRMKEY_MCID_HEADER_SCAN     1076
 #define IDC_DRMKEY_MCID_DATA            1077
 #define IDC_BTN_INDITE                  1078
-#define IDC_MEID_DATA                   10781
 #define IDC_SERIAL_NO_DATA              1079
 #define IDC_SERIAL_NO_HEADER_SCAN       1080
 #define IDC_BTN_SAVE                    1081
-#define IDC_MEID_HEADER_SCAN            10811
 #define IDC_SN_VERSION                  1082
-#define IDC_ESN_DATA                    10821
+#define IDC_BTN_CHANGEPW                2082
 #define IDC_METACOREDLL_VERSION         1083
-#define IDC_ESN_HEADER_SCAN             10831
 #define IDC_METAAPPDLL_VERSION          1084
 #define IDC_EDIT_VERIFY_PASSWD          1085
 #define ID_BTN_VERIFY_OK                1086
@@ -232,6 +222,17 @@
 #define IDC_TV_TEST_OK_TIME             10211
 #define IDC_TV_TEST_OK_PERCENT2         10212
 #define IDC_TV_TEST_OK_TIME2            10213
+#define IDC_CHECK_MODELDETAILS          10501
+#define IDC_WRITE_MEID_CHECK            10521
+#define IDC_WRITE_ESN_CHECK             10541
+#define IDC_MEID_HEADER_STR             10561
+#define IDC_ESN_HEADER_STR              10581
+#define IDC_MEID_HEADER_CHECK           10601
+#define IDC_ESN_HEADER_CHECK            10611
+#define IDC_MEID_DATA                   10781
+#define IDC_MEID_HEADER_SCAN            10811
+#define IDC_ESN_DATA                    10821
+#define IDC_ESN_HEADER_SCAN             10831
 #define IDC_TOOL_CUSTOM_TITLE           20092
 #define IDR_OPTION_SWITCHTOOL           32772
 #define IDR_OPTION_EXTMODEM             32773
@@ -263,7 +264,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        164
+#define _APS_NEXT_RESOURCE_VALUE        166
 #define _APS_NEXT_COMMAND_VALUE         32801
 #define _APS_NEXT_CONTROL_VALUE         1170
 #define _APS_NEXT_SYMED_VALUE           101
