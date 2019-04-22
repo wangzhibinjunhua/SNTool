@@ -157,6 +157,9 @@ IniData_struct g_IniData[] =
 	{ "Factoryreset Check", (bool*)&g_sMetaComm.bFactoryresetCheck, INI_BOOLEAN },
 	{ "ModelDetails Check", (bool*)&g_sMetaComm.bModelDetailsCheck, INI_BOOLEAN },
 	//end
+	//add by wzb for offline test
+	{ "Offline Test", (bool*)&g_sMetaComm.bOfflineTest, INI_BOOLEAN },
+	//end
 
     //for C2K
     {"Enable Serial No", (bool*)&g_sMetaComm.EnableSerialNo, INI_BOOLEAN},
@@ -177,6 +180,8 @@ IniData_struct g_CustomConfigIniData[] =
 	{"DB_Port", (char*)g_sMetaComm.strDBPort, INI_STRING},
 	{"DB_Name", (char*)g_sMetaComm.strDBName, INI_STRING},
 	{"SoftwarePN", (char*)g_sMetaComm.strSoftwarePN, INI_STRING},
+	{"offline_CCFlag", (char*)g_sMetaComm.strOfflineCCFlag, INI_STRING },
+	{"offline_ModelDetails", (char*)g_sMetaComm.strOfflineDetailModel, INI_STRING },
 };
 //end
 
@@ -883,6 +888,11 @@ int SelectSqlByType(int type)
 
 int UploadDataToSql()
 {
+	if (g_sMetaComm.bOfflineTest)
+	{
+		return 0;
+	}
+	
 	int iRet = 0;
 
 	CString strSRC;

@@ -109,6 +109,13 @@ void SmartPhoneSN::SPInit()
 //add by wzb for search smo and detailmodel
 META_RESULT SmartPhoneSN::SelectSMOInfo()
 {
+	if (g_sMetaComm.bOfflineTest)
+	{
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::SelectSMOInfo() offline test start...");
+		strcpy_s(g_sMetaComm.strCCFlag, g_sMetaComm.strOfflineCCFlag);
+		strcpy_s(g_sMetaComm.strDetailModel, g_sMetaComm.strOfflineDetailModel);
+		return META_SUCCESS;
+	}
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::SelectSMOInfo() start...");
 	OleEnvInit();
 	int iRet = 0;

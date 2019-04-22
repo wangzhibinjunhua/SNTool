@@ -34,6 +34,7 @@ const char *g_strToolVersion = "国家码工具 V1.3.070419";//
 const char *g_strToolVersionNo = "V1.3.070419";
 const char *g_strToolWrite = "写国家码工具";
 const char *g_strToolDelete = "删除国家码工具";
+const char *g_strOfflineTest = "Offline Test";
 //add by wzb
 int iDateLimit = 190507;//版本号和限制时间同步修改
 //end
@@ -356,20 +357,32 @@ void CSNWriterDlg::ParameterInit()
 	//add by wzb for test config ini
 #if 1
 	CString strTempTestInfo;
-	strTempTestInfo.Format(
-		_T("请检查配置信息 \r\n")
-		_T("DB_SQLSrc: %s\r\n")
-		_T("DB_SQLUser: %s\r\n")
-		_T("DB_SQLPassword: %s\r\n")
-		_T("DB_Port: %s\r\n")
-		_T("DB_Name: %s\r\n")
-		_T("SoftwarePN: %s\r\n"),
-		g_sMetaComm.strDBSQLSrc,
-		g_sMetaComm.strDBSQLUser,
-		g_sMetaComm.strDBSQLPassword,
-		g_sMetaComm.strDBPort,
-		g_sMetaComm.strDBName,
-		g_sMetaComm.strSoftwarePN);
+	if (g_sMetaComm.bOfflineTest)
+	{
+		strTempTestInfo.Format(
+			_T("请检查配置信息 \r\n")
+			_T("offline_CCFlag: %s\r\n")
+			_T("offline_ModelDetails: %s\r\n"),
+			g_sMetaComm.strOfflineCCFlag,
+			g_sMetaComm.strOfflineDetailModel);
+	}
+	else
+	{
+		strTempTestInfo.Format(
+			_T("请检查配置信息 \r\n")
+			_T("DB_SQLSrc: %s\r\n")
+			_T("DB_SQLUser: %s\r\n")
+			_T("DB_SQLPassword: %s\r\n")
+			_T("DB_Port: %s\r\n")
+			_T("DB_Name: %s\r\n")
+			_T("SoftwarePN: %s\r\n"),
+			g_sMetaComm.strDBSQLSrc,
+			g_sMetaComm.strDBSQLUser,
+			g_sMetaComm.strDBSQLPassword,
+			g_sMetaComm.strDBPort,
+			g_sMetaComm.strDBName,
+			g_sMetaComm.strSoftwarePN);
+	}
 	//::AfxMessageBox((const TCHAR *)strTempTestInfo, MB_ICONERROR);
 	PopupMsgBox("Warning", MB_OK | MB_ICONWARNING, strTempTestInfo);
 #endif
@@ -394,7 +407,14 @@ void CSNWriterDlg::HideSomeUIItem()
 
 	//for show title
 	CString strTitle;
-	strTitle.Format(_T("%s    %s ") ,g_strToolWrite, g_strToolVersionNo);
+	if (g_sMetaComm.bOfflineTest)
+	{
+		strTitle.Format(_T("%s    %s    %s"), g_strToolWrite, g_strToolVersionNo,g_strOfflineTest);
+	}
+	else
+	{
+		strTitle.Format(_T("%s    %s "), g_strToolWrite, g_strToolVersionNo);
+	}
 	CFont mFont;
 	mFont.CreatePointFont(400, _T("宋体"));
 	GetDlgItem(IDC_TOOL_CUSTOM_TITLE)->SetWindowText(strTitle);

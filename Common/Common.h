@@ -295,6 +295,8 @@ typedef struct {
 	char strSoftwarePN[MAX_PATH];
 	char strCCFlag[4];
 	char strDetailModel[64];
+	char strOfflineCCFlag[4];
+	char strOfflineDetailModel[64];
 	char strPhoneSN[64];
 	char strPhoneModel[64];
 	long lTimeStep1Start;
@@ -309,6 +311,7 @@ typedef struct {
 	bool bBatteryCheck;
 	bool bFactoryresetCheck;
 	bool bModelDetailsCheck;
+	bool bOfflineTest;
 	//end
 	
 } META_Common_struct;
