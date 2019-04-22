@@ -148,8 +148,8 @@ META_RESULT SmartPhoneSN::SelectSMOInfo()
 META_RESULT SmartPhoneSN::CheckCPUInfo()
 {
 	META_RESULT MetaResult = META_SUCCESS;
-#if 0
-	char *pPropertySpecial = "ro.custom.tplink_sc";
+#if 1
+	char *pPropertySpecial = "ro.customw.designed_by_a8";
 	int iPropertyLen = strlen(pPropertySpecial);
 	unsigned char pDatainProperty[32] = { 0 };
 	memcpy(pDatainProperty, pPropertySpecial, iPropertyLen);
