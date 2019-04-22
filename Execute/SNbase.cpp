@@ -520,34 +520,23 @@ CheckFinalTestFlag_Status_e SNBase::CheckFinalTestStatus(const char* strBarcode)
 //add by wzb 20190318
 META_RESULT SNBase::ConductBarcodeDataNoSyncProdinfo(char *pOutData, unsigned short RID_para, char *pInDatabuf, int outBufSize)
 {
-    char flag_wire;     // wireless flag
-    char flag_cal[2];   // calibration flag
-    char flag_nsft;     // nsft flag
-
-    flag_wire = pOutData[59];
-    flag_cal[0] = pOutData[60];
-    flag_cal[1] = pOutData[61];
-    flag_nsft = pOutData[62];
-
-    strncpy_s(pOutData, outBufSize, pInDatabuf, BARCODE_MAX_LENGTH);
-
-    if (flag_wire != '\0' && flag_cal[0] != '\0' && flag_cal[1] != '\0' && flag_nsft != '\0')
-    {
-        int barcode_len;
-        barcode_len = strlen(pOutData);
-        if (barcode_len < 59)
-            memset(pOutData + barcode_len, 0x20, 59 - barcode_len);
-
-        pOutData[59] = flag_wire;
-        pOutData[60] = flag_cal[0];
-        pOutData[61] = flag_cal[1];
-        pOutData[62] = flag_nsft;
-        pOutData[63] = '\0';
-    }
-
-    // Sync to AP Prod_Info
-    //strncpy_s(m_sScanData.strBarcode, pOutData, BARCODE_MAX_LENGTH);
-
+   
+	  strncpy_s(pOutData, outBufSize, pInDatabuf, BARCODE_MAX_LENGTH);
+	  int barcode_len;
+      barcode_len = strlen(pOutData);
+	  MTRACE(g_hEBOOT_DEBUG,"ConductBarcodeDataNoSyncProdinfo barcode_len=%d,pOutData=%s",barcode_len, pOutData);
+      if (barcode_len > 19)
+      {
+		  for (int i = 0; i < barcode_len; i++) {
+			  if (pOutData[i] == 0x20)
+			  {
+				  pOutData[i]= '\0';
+				  break;
+			  }
+		  }
+	  }
+	  MTRACE(g_hEBOOT_DEBUG, "ConductBarcodeDataNoSyncProdinfo barcode_len1=%d,pOutData=%s", strlen(pOutData), pOutData);
+			   
     return META_SUCCESS;
 }
 

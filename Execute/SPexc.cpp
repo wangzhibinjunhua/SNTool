@@ -148,8 +148,8 @@ META_RESULT SmartPhoneSN::SelectSMOInfo()
 META_RESULT SmartPhoneSN::CheckCPUInfo()
 {
 	META_RESULT MetaResult = META_SUCCESS;
-#if 1
-	char *pPropertySpecial = "ro.customw.designed_by_a8";
+#if 0 // 自定义属性值meta模式读取不到. 需要修改selinux 暂不使用
+	char *pPropertySpecial = "ro.product.designed_by_a8";
 	int iPropertyLen = strlen(pPropertySpecial);
 	unsigned char pDatainProperty[32] = { 0 };
 	memcpy(pDatainProperty, pPropertySpecial, iPropertyLen);
@@ -1896,7 +1896,7 @@ META_RESULT SmartPhoneSN::ReadSN_From_PRODINFO()
 		memcpy(pReadData, sNVRAM_ReadCnf.buf, 64);
 		(this->*pDataFunc)(tmpReadData, 1, pReadData, 64);
 
-		if (strncmp(m_sScanData.strBarcode, tmpReadData, 64) != 0){
+		if (strncmp(m_sScanData.strBarcode, tmpReadData, strlen(tmpReadData)) != 0){
 			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: ScanSN[%s]", m_sScanData.strBarcode);
             MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: ReadSN[%s]", tmpReadData);
             MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: Check SN data FAIL!!");
