@@ -137,6 +137,53 @@ META_RESULT SmartPhoneSN::SelectSMOInfo()
 }
 //end
 
+//add by wzb for check cpu ,property
+META_RESULT SmartPhoneSN::CheckCPUInfo()
+{
+	META_RESULT MetaResult = META_SUCCESS;
+#if 0
+	char *pPropertySpecial = "ro.custom.tplink_sc";
+	int iPropertyLen = strlen(pPropertySpecial);
+	unsigned char pDatainProperty[32] = { 0 };
+	memcpy(pDatainProperty, pPropertySpecial, iPropertyLen);
+	unsigned char pRev[64] = { 0 };
+	MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainProperty, iPropertyLen, pRev, 64);
+	if (MetaResult != META_SUCCESS)
+	{
+		return MetaResult;
+	}
+	if (pRev[0] != 49)
+	{
+		AfxMessageBox(_T("Î´Öª´íÎó\r\n ´íÎó´úÂë:0x0x100018"));
+		return META_FAILED;
+	}
+#endif
+	//check cpu mt6761
+	char *pPropertyCpu = "ro.hardware";
+	int iPropertyCpuLen = strlen(pPropertyCpu);
+	unsigned char pDatainPropertyCpu[32] = { 0 };
+	memcpy(pDatainPropertyCpu, pPropertyCpu, iPropertyCpuLen);
+	unsigned char pRev1[64] = { 0 };
+	MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyCpu, iPropertyCpuLen, pRev1, 64);
+	if (MetaResult != META_SUCCESS)
+	{
+		return MetaResult;
+	}
+	if (pRev1[0] != 109/*m*/
+		|| pRev1[1] != 116/*t*/
+		|| pRev1[2] != 54 /*6*/
+		|| pRev1[3] != 55 /*7*/
+		|| pRev1[4] != 54 /*6*/
+		|| pRev1[5] != 49 /*1*/)
+	{
+		AfxMessageBox(_T("Î´Öª´íÎó\r\n ´íÎó´úÂë:0x0x100017"));
+		return META_FAILED;
+	}
+	return META_SUCCESS;
+
+}
+//end
+
 
 //add by wzb
 META_RESULT SmartPhoneSN::WriteCountryCode()
@@ -145,6 +192,15 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() scanSN=%s...",m_sScanData.strBarcode);
 	UpdateProgress(0.25);
 	META_RESULT MetaResult = META_SUCCESS;
+
+	//check cpu  special property
+	MetaResult = CheckCPUInfo();
+	if (MetaResult != META_SUCCESS)
+	{
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check cpu info and specail property FAIL!");
+		return MetaResult;
+	}
+	//end check cpu  special property
 
 	//step 2 check SN //2222222222222222222222222222222222222222//////////
 	UpdateStatusProgress(4, 0.3, 0);

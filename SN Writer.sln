@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SN_Writer", "SN Writer.vcxproj", "{F60BB342-E756-4D97-A3F8-49347225D770}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CCToolSetup", "..\CCToolSetup\CCToolSetup.vdproj", "{2F0A81CF-29DB-4237-AE0F-4959D8E54F5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,8 @@ Global
 		{F60BB342-E756-4D97-A3F8-49347225D770}.Debug|Win32.Build.0 = Debug|Win32
 		{F60BB342-E756-4D97-A3F8-49347225D770}.Release|Win32.ActiveCfg = Release|Win32
 		{F60BB342-E756-4D97-A3F8-49347225D770}.Release|Win32.Build.0 = Release|Win32
+		{2F0A81CF-29DB-4237-AE0F-4959D8E54F5C}.Debug|Win32.ActiveCfg = Debug
+		{2F0A81CF-29DB-4237-AE0F-4959D8E54F5C}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
