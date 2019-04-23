@@ -30,8 +30,8 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "国家码工具 V1.4.220419";//
-const char *g_strToolVersionNo = "V1.4.220419";
+const char *g_strToolVersion = "国家码工具 V1.6.220419";//
+const char *g_strToolVersionNo = "V1.6.220419";
 const char *g_strToolWrite = "写国家码工具";
 const char *g_strToolDelete = "删除国家码工具";
 const char *g_strOfflineTest = "Offline Test";
