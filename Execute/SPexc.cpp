@@ -232,7 +232,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()get phone model start");
 	if (g_sMetaComm.bModelDetailsCheck)
 	{
-		char *pPropertyModel = "ro.product.model";
+		char *pPropertyModel = "ro.product.name";
 		int iPropertyModelLen = strlen(pPropertyModel);
 		unsigned char pDatainPropertyModel[32] = { 0 };
 		memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
