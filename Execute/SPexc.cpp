@@ -2010,7 +2010,10 @@ META_RESULT SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start()
 	MTRACE(g_hEBOOT_DEBUG, "memcpy detailmodel to Prod_Info nvram data start...");
 	
 	//detailmodel in prodinfo offset 400 (0x190)
-	memcpy(sNVRAM_ReadCnf.buf + 0x190, g_sMetaComm.strDetailModel, strlen(g_sMetaComm.strDetailModel));
+	char pDetailModel[32] = { 0 };
+	memcpy(pDetailModel, g_sMetaComm.strDetailModel, strlen(g_sMetaComm.strDetailModel));
+	memcpy(sNVRAM_ReadCnf.buf + 0x190, pDetailModel, 32);
+	//memcpy(sNVRAM_ReadCnf.buf + 0x190, g_sMetaComm.strDetailModel, strlen(g_sMetaComm.strDetailModel));
 	memcpy(pWriteData, sNVRAM_ReadCnf.buf, iWriteBufSize);
 	MTRACE(g_hEBOOT_DEBUG, "memcpy detailmodel to Prod_Info nvram data successfully!!");
 	
