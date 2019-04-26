@@ -148,8 +148,8 @@ META_RESULT SmartPhoneSN::SelectSMOInfo()
 META_RESULT SmartPhoneSN::CheckCPUInfo()
 {
 	META_RESULT MetaResult = META_SUCCESS;
-#if 0 // 自定义属性值meta模式读取不到. 需要修改selinux 暂不使用
-	char *pPropertySpecial = "ro.product.designed_by_a8";
+#if 0 // 
+	char *pPropertySpecial = "ro.designed_by_a8";
 	int iPropertyLen = strlen(pPropertySpecial);
 	unsigned char pDatainProperty[32] = { 0 };
 	memcpy(pDatainProperty, pPropertySpecial, iPropertyLen);
@@ -321,7 +321,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check factoryreset bFactoryresetCheck=%d", g_sMetaComm.bFactoryresetCheck? 1:0);
 	if (g_sMetaComm.bFactoryresetCheck)
 	{
-		char *pPropertyReset = "persist.custom.setup";
+		char *pPropertyReset = "persist.vendor.meta_reset";
 		int iPropertyResetLen = strlen(pPropertyReset);
 		unsigned char pDatainPropertyReset[32] = { 0 };
 		memcpy(pDatainPropertyReset, pPropertyReset, iPropertyResetLen);
