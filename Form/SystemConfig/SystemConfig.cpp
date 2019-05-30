@@ -277,6 +277,9 @@ void CSystemConfig::HideSomeDlgItem()
 	GetDlgItem(IDC_MEID_HEADER_STR)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_ESN_HEADER_CHECK)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_ESN_HEADER_STR)->ShowWindow(SW_HIDE);
+	if (!g_sMetaComm.bPasswordCheck) {
+		GetDlgItem(IDC_BTN_CHANGEPW)->ShowWindow(SW_HIDE);
+	}
 }
 //end
 

@@ -159,6 +159,7 @@ IniData_struct g_IniData[] =
 	//end
 	//add by wzb for offline test
 	{ "Offline Test", (bool*)&g_sMetaComm.bOfflineTest, INI_BOOLEAN },
+	{ "Password Check", (bool*)&g_sMetaComm.bPasswordCheck, INI_BOOLEAN },
 	//end
 
     //for C2K

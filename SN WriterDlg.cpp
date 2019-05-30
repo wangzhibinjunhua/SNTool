@@ -673,12 +673,21 @@ void CSNWriterDlg::OnBtnSysconfig()
 {
     // TODO: Add your control notification handler code here
 	//add by wzb for systemconfig password
-	CVerifyPasswdDlg dlg1;
-	if (IDOK == dlg1.DoModal())
+	if (g_sMetaComm.bPasswordCheck)
+	{
+		CVerifyPasswdDlg dlg1;
+		if (IDOK == dlg1.DoModal())
+		{
+			CSystemConfig dlg;
+			dlg.DoModal();
+		}
+	}
+	else
 	{
 		CSystemConfig dlg;
-		 dlg.DoModal();
+		dlg.DoModal();
 	}
+	
 	//end
     //CSystemConfig dlg;
    // dlg.DoModal();

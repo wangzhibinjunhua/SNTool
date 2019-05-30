@@ -312,6 +312,7 @@ typedef struct {
 	bool bFactoryresetCheck;
 	bool bModelDetailsCheck;
 	bool bOfflineTest;
+	bool bPasswordCheck;
 	//end
 	
 } META_Common_struct;
