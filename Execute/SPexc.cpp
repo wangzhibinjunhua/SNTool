@@ -148,7 +148,7 @@ META_RESULT SmartPhoneSN::SelectSMOInfo()
 META_RESULT SmartPhoneSN::CheckCPUInfo()
 {
 	META_RESULT MetaResult = META_SUCCESS;
-#if 0 // 
+#if 1 // 
 	char *pPropertySpecial = "ro.designed_by_a8";
 	int iPropertyLen = strlen(pPropertySpecial);
 	unsigned char pDatainProperty[32] = { 0 };
@@ -159,7 +159,9 @@ META_RESULT SmartPhoneSN::CheckCPUInfo()
 	{
 		return MetaResult;
 	}
-	if (pRev[0] != 49)
+	if (pRev[0] != 65 //A
+		|| pRev[1] != 56 //8
+		)
 	{
 		AfxMessageBox(_T("Î´Öª´íÎó\r\n ´íÎó´úÂë:0x0x100018"));
 		return META_FAILED;
@@ -181,7 +183,7 @@ META_RESULT SmartPhoneSN::CheckCPUInfo()
 		|| pRev1[2] != 54 /*6*/
 		|| pRev1[3] != 55 /*7*/
 		|| pRev1[4] != 54 /*6*/
-		|| pRev1[5] != 49 /*1*/)
+		/*|| pRev1[5] != 49*/ /*1*/)
 	{
 		AfxMessageBox(_T("Î´Öª´íÎó\r\n ´íÎó´úÂë:0x0x100017"));
 		return META_FAILED;
