@@ -210,6 +210,38 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 		return MetaResult;
 	}
 	//end check cpu  special property
+	//step 7 check factory reset ////7777777777777777777777////////////////
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check factoryreset bFactoryresetCheck=%d", g_sMetaComm.bFactoryresetCheck ? 1 : 0);
+	if (g_sMetaComm.bFactoryresetCheck)
+	{
+		char *pPropertyReset = "persist.vendor.meta_reset";
+		int iPropertyResetLen = strlen(pPropertyReset);
+		unsigned char pDatainPropertyReset[32] = { 0 };
+		memcpy(pDatainPropertyReset, pPropertyReset, iPropertyResetLen);
+		unsigned char pRev[64] = { 0 };
+		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyReset, iPropertyResetLen, pRev, 64);
+		if (MetaResult != META_SUCCESS)
+		{
+			UpdateTestItemUIMsg(5, "fail, phone has not been factory reset ");
+			UpdateStatusProgress(5, 1.0, 0);
+			return MetaResult;
+		}
+
+		if (pRev[0] == 49)
+		{
+			
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() not factory reset reject");
+			UpdateTestItemUIMsg(5, "fail ,phone has not been factory reset ");
+			UpdateStatusProgress(5, 1.0, 0);
+			return META_FAILED;
+		}
+		else
+		{
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() already factory reset");
+		}
+	}
+	//end step 7 check factory reset ////7777777777777777777777////////////////
+
 
 	//step 2 check SN //2222222222222222222222222222222222222222//////////
 	UpdateStatusProgress(4, 0.3, 0);
@@ -319,6 +351,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	//end step 6 upload data to sql server //////6666666666666666666666666666////////////////
 
 
+#if 0
 	//step 7 check factory reset ////7777777777777777777777////////////////
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check factoryreset bFactoryresetCheck=%d", g_sMetaComm.bFactoryresetCheck? 1:0);
 	if (g_sMetaComm.bFactoryresetCheck)
@@ -355,7 +388,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 		}
 	}
 	//end step 7 check factory reset ////7777777777777777777777////////////////
-	
+#endif	
 	MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() end...");
 	return META_SUCCESS;
 
