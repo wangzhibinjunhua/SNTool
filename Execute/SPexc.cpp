@@ -242,6 +242,28 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	}
 	//end step 7 check factory reset ////7777777777777777777777////////////////
 
+	//step check battery adc ///////////////
+	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery bBatteryCheck=%d", g_sMetaComm.bBatteryCheck ? 1 : 0);
+	if (g_sMetaComm.bBatteryCheck)
+	{
+		int battery_level = 0;
+		MetaResult = SP_META_ADC_GetBatCapacity_r(m_hSPMetaHandle, 8000, &battery_level);
+		if (MetaResult != META_SUCCESS)
+		{
+			UpdateTestItemUIMsg(5, "fail, check battery fail ");
+			UpdateStatusProgress(5, 1.0, 0);
+			return MetaResult;
+		}
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery level=%d", battery_level);
+		if (battery_level > g_sMetaComm.iBatmax || battery_level < g_sMetaComm.iBatmin)
+		{
+			UpdateTestItemUIMsg(5, "fail, battery level=%d", battery_level);
+			UpdateStatusProgress(5, 1.0, 0);
+			return META_FAILED;
+		}
+		
+	}
+	//end step check battery adc//////////////
 
 	//step 2 check SN //2222222222222222222222222222222222222222//////////
 	UpdateStatusProgress(4, 0.3, 0);

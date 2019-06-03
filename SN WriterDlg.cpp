@@ -361,8 +361,12 @@ void CSNWriterDlg::ParameterInit()
 	{
 		strTempTestInfo.Format(
 			_T("«ÎºÏ≤È≈‰÷√–≈œ¢ \r\n")
+			_T("Battery_min: %d\r\n")
+			_T("Battery_max: %d\r\n")
 			_T("offline_CCFlag: %s\r\n")
 			_T("offline_ModelDetails: %s\r\n"),
+			g_sMetaComm.iBatmin,
+			g_sMetaComm.iBatmax,
 			g_sMetaComm.strOfflineCCFlag,
 			g_sMetaComm.strOfflineDetailModel);
 	}
@@ -375,12 +379,16 @@ void CSNWriterDlg::ParameterInit()
 			_T("DB_SQLPassword: %s\r\n")
 			_T("DB_Port: %s\r\n")
 			_T("DB_Name: %s\r\n")
+			_T("Battery_min: %d\r\n")
+			_T("Battery_max: %d\r\n")
 			_T("SoftwarePN: %s\r\n"),
 			g_sMetaComm.strDBSQLSrc,
 			g_sMetaComm.strDBSQLUser,
 			g_sMetaComm.strDBSQLPassword,
 			g_sMetaComm.strDBPort,
 			g_sMetaComm.strDBName,
+			g_sMetaComm.iBatmin,
+			g_sMetaComm.iBatmax,
 			g_sMetaComm.strSoftwarePN);
 	}
 	//::AfxMessageBox((const TCHAR *)strTempTestInfo, MB_ICONERROR);

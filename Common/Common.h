@@ -313,6 +313,8 @@ typedef struct {
 	bool bModelDetailsCheck;
 	bool bOfflineTest;
 	bool bPasswordCheck;
+	int iBatmin;
+	int iBatmax;
 	//end
 	
 } META_Common_struct;

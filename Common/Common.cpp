@@ -160,6 +160,7 @@ IniData_struct g_IniData[] =
 	//add by wzb for offline test
 	{ "Offline Test", (bool*)&g_sMetaComm.bOfflineTest, INI_BOOLEAN },
 	{ "Password Check", (bool*)&g_sMetaComm.bPasswordCheck, INI_BOOLEAN },
+
 	//end
 
     //for C2K
@@ -183,6 +184,8 @@ IniData_struct g_CustomConfigIniData[] =
 	{"SoftwarePN", (char*)g_sMetaComm.strSoftwarePN, INI_STRING},
 	{"offline_CCFlag", (char*)g_sMetaComm.strOfflineCCFlag, INI_STRING },
 	{"offline_ModelDetails", (char*)g_sMetaComm.strOfflineDetailModel, INI_STRING },
+	{ "Battery Min", &g_sMetaComm.iBatmin, INI_INTEGER },
+	{ "Battery Max", &g_sMetaComm.iBatmax, INI_INTEGER },
 };
 //end
 
