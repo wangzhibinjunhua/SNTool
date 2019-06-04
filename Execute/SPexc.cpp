@@ -3032,7 +3032,19 @@ META_RESULT SmartPhoneSN::REQ_CountryCode_WriteAP_NVRAM_Start(char *pInData, uns
 	MTRACE(g_hEBOOT_DEBUG, "tmpCCFlag=%s", ptmpCCFlag);
 	if (ptmpCCFlag[0] != 0)
 	{
-
+		CString strTmpInfo;
+		strTmpInfo.Format(_T("已存在国家码:%s\n 确认覆盖写入吗?"), 
+							ptmpCCFlag);
+		int iResp = AfxMessageBox(strTmpInfo, MB_OKCANCEL | MB_ICONQUESTION);
+		if (iResp == IDOK)
+		{
+			//continue write;
+		}
+		else 
+		{
+			meta_result = META_FAILED;
+			goto Err;
+		}
 	}
 	//end check countrycode exist ////////
    
