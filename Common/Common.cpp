@@ -186,6 +186,7 @@ IniData_struct g_CustomConfigIniData[] =
 	{"offline_ModelDetails", (char*)g_sMetaComm.strOfflineDetailModel, INI_STRING },
 	{ "Battery Min", &g_sMetaComm.iBatmin, INI_INTEGER },
 	{ "Battery Max", &g_sMetaComm.iBatmax, INI_INTEGER },
+	{ "Delete_CountryCode", (bool*)&g_sMetaComm.bDeleteCCSwitch, INI_BOOLEAN },
 };
 //end
 
@@ -951,6 +952,72 @@ int UploadDataToSql()
 		AfxMessageBox(strError);
 	}
 	
+	pConn.Release();
+	//AfxMessageBox("UploadDataToSql ok !");
+	return iRet;
+}
+
+int UploadDelDataToSql()
+{
+	if (g_sMetaComm.bOfflineTest)
+	{
+		return 0;
+	}
+
+	int iRet = 0;
+
+	CString strSRC;
+	strSRC = "Driver=SQL Server;Server=";
+	strSRC += g_sMetaComm.strDBSQLSrc;//"127.0.0.1";
+	strSRC += ",";
+	strSRC += g_sMetaComm.strDBPort;//1433
+	strSRC += ";Database=";
+	strSRC += g_sMetaComm.strDBName;//"DBTMTS";
+	strSRC += ";UID=";
+	strSRC += g_sMetaComm.strDBSQLUser;//"root"; 
+	strSRC += ";PWD=";
+	strSRC += g_sMetaComm.strDBSQLPassword;//"123456";
+										   //CString strSQL = "INSERT INTO [DBTMTS].[dbo].[TpCountryCode] ([SN], [SoftwarePN], [CountryCode], [WriteTime], [SMO], [CCFlag], [DetailModel] ) VALUES ('3901A18423D00180', '868968030004432', '868968030465670', '', '2541254120', '2019-03-22 14:47:49.170', '', '');";
+	CString strSQL;
+	CTime mTime;
+	mTime = CTime::GetCurrentTime();
+	CString strDate = mTime.Format("%Y-%m-%d %H:%M:%S");
+	strSQL.Format("INSERT INTO[DBTMTS].[dbo].[CCDeleteRecord]([SN], [SoftwarePN], [UpdateFlag], [ATime]) VALUES('%s', '%s', '%s', '%s');", g_sMetaComm.strPhoneSN, g_sMetaComm.strSoftwarePN, "1", strDate);
+	//AfxMessageBox(strSQL);//test
+	_variant_t varSRC(strSRC);
+	_variant_t varSQL(strSQL);
+	_bstr_t bstrSRC(strSRC);
+
+	try
+	{
+		pConn.CreateInstance("ADODB.Connection");
+		pConn->Open(bstrSRC, "", "", -1);
+	}
+	catch (_com_error e)
+	{
+		iRet = -1;
+		CString strError;
+		strError.Format(_T("连接数据库失败\n %s:%s"), e.ErrorMessage(), (LPCTSTR)e.Description());
+		AfxMessageBox(strError);
+		pConn.Release();
+		return iRet;
+	}
+
+	COleVariant vtOptional((long)DISP_E_PARAMNOTFOUND, VT_ERROR);
+
+
+	try
+	{
+		pConn->Execute(_bstr_t(strSQL), &vtOptional, -1);
+	}
+	catch (_com_error e)
+	{
+		iRet = -1;
+		CString strError;
+		strError.Format(_T("修改数据库数据失败\n %s:%s"), e.ErrorMessage(), (LPCTSTR)e.Description());
+		AfxMessageBox(strError);
+	}
+
 	pConn.Release();
 	//AfxMessageBox("UploadDataToSql ok !");
 	return iRet;

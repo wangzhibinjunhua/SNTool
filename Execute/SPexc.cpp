@@ -109,7 +109,7 @@ void SmartPhoneSN::SPInit()
 //add by wzb for search smo and detailmodel
 META_RESULT SmartPhoneSN::SelectSMOInfo()
 {
-	if (g_sMetaComm.bOfflineTest)
+	if (g_sMetaComm.bOfflineTest || g_sMetaComm.bDeleteCCSwitch)
 	{
 		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::SelectSMOInfo() offline test start...");
 		strcpy_s(g_sMetaComm.strCCFlag, g_sMetaComm.strOfflineCCFlag);
@@ -210,60 +210,64 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 		return MetaResult;
 	}
 	//end check cpu  special property
-	//step 7 check factory reset ////7777777777777777777777////////////////
-	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check factoryreset bFactoryresetCheck=%d", g_sMetaComm.bFactoryresetCheck ? 1 : 0);
-	if (g_sMetaComm.bFactoryresetCheck)
-	{
-		char *pPropertyReset = "persist.vendor.meta_reset";
-		int iPropertyResetLen = strlen(pPropertyReset);
-		unsigned char pDatainPropertyReset[32] = { 0 };
-		memcpy(pDatainPropertyReset, pPropertyReset, iPropertyResetLen);
-		unsigned char pRev[64] = { 0 };
-		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyReset, iPropertyResetLen, pRev, 64);
-		if (MetaResult != META_SUCCESS)
-		{
-			UpdateTestItemUIMsg(5, "fail, phone has not been factory reset ");
-			UpdateStatusProgress(5, 1.0, 0);
-			return MetaResult;
-		}
 
-		if (pRev[0] == 49)
-		{
-			
-			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() not factory reset reject");
-			UpdateTestItemUIMsg(5, "fail ,phone has not been factory reset ");
-			UpdateStatusProgress(5, 1.0, 0);
-			return META_FAILED;
-		}
-		else
-		{
-			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() already factory reset");
-		}
-	}
-	//end step 7 check factory reset ////7777777777777777777777////////////////
-
-	//step check battery adc ///////////////
-	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery bBatteryCheck=%d", g_sMetaComm.bBatteryCheck ? 1 : 0);
-	if (g_sMetaComm.bBatteryCheck)
+	if (!g_sMetaComm.bDeleteCCSwitch)
 	{
-		int battery_level = 0;
-		MetaResult = SP_META_ADC_GetBatCapacity_r(m_hSPMetaHandle, 8000, &battery_level);
-		if (MetaResult != META_SUCCESS)
+		//step 7 check factory reset ////7777777777777777777777////////////////
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check factoryreset bFactoryresetCheck=%d", g_sMetaComm.bFactoryresetCheck ? 1 : 0);
+		if (g_sMetaComm.bFactoryresetCheck)
 		{
-			UpdateTestItemUIMsg(5, "fail, check battery fail ");
-			UpdateStatusProgress(5, 1.0, 0);
-			return MetaResult;
+			char *pPropertyReset = "persist.vendor.meta_reset";
+			int iPropertyResetLen = strlen(pPropertyReset);
+			unsigned char pDatainPropertyReset[32] = { 0 };
+			memcpy(pDatainPropertyReset, pPropertyReset, iPropertyResetLen);
+			unsigned char pRev[64] = { 0 };
+			MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyReset, iPropertyResetLen, pRev, 64);
+			if (MetaResult != META_SUCCESS)
+			{
+				UpdateTestItemUIMsg(5, "fail, phone has not been factory reset ");
+				UpdateStatusProgress(5, 1.0, 0);
+				return MetaResult;
+			}
+
+			if (pRev[0] == 49)
+			{
+
+				MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() not factory reset reject");
+				UpdateTestItemUIMsg(5, "fail ,phone has not been factory reset ");
+				UpdateStatusProgress(5, 1.0, 0);
+				return META_FAILED;
+			}
+			else
+			{
+				MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() already factory reset");
+			}
 		}
-		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery level=%d", battery_level);
-		if (battery_level > g_sMetaComm.iBatmax || battery_level < g_sMetaComm.iBatmin)
+		//end step 7 check factory reset ////7777777777777777777777////////////////
+
+		//step check battery adc ///////////////
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery bBatteryCheck=%d", g_sMetaComm.bBatteryCheck ? 1 : 0);
+		if (g_sMetaComm.bBatteryCheck)
 		{
-			UpdateTestItemUIMsg(5, "fail, battery level=%d", battery_level);
-			UpdateStatusProgress(5, 1.0, 0);
-			return META_FAILED;
+			int battery_level = 0;
+			MetaResult = SP_META_ADC_GetBatCapacity_r(m_hSPMetaHandle, 8000, &battery_level);
+			if (MetaResult != META_SUCCESS)
+			{
+				UpdateTestItemUIMsg(5, "fail, check battery fail ");
+				UpdateStatusProgress(5, 1.0, 0);
+				return MetaResult;
+			}
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery level=%d", battery_level);
+			if (battery_level > g_sMetaComm.iBatmax || battery_level < g_sMetaComm.iBatmin)
+			{
+				UpdateTestItemUIMsg(5, "fail, battery level=%d", battery_level);
+				UpdateStatusProgress(5, 1.0, 0);
+				return META_FAILED;
+			}
+
 		}
-		
+		//end step check battery adc//////////////
 	}
-	//end step check battery adc//////////////
 
 	//step 2 check SN //2222222222222222222222222222222222222222//////////
 	UpdateStatusProgress(4, 0.3, 0);
@@ -285,30 +289,33 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	
 
 	//step 3 check phone detailmodel //333333333333333333333333333333333333//////////
-	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()get phone model start");
-	if (g_sMetaComm.bModelDetailsCheck)
+	if (!g_sMetaComm.bDeleteCCSwitch)
 	{
-		char *pPropertyModel = "ro.product.name";
-		int iPropertyModelLen = strlen(pPropertyModel);
-		unsigned char pDatainPropertyModel[32] = { 0 };
-		memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
-		unsigned char pRev[64] = { 0 };
-		MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyModel, iPropertyModelLen, pRev, 64);
-		if (MetaResult != META_SUCCESS)
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()get phone model start");
+		if (g_sMetaComm.bModelDetailsCheck)
 		{
-			return MetaResult;
+			char *pPropertyModel = "ro.product.name";
+			int iPropertyModelLen = strlen(pPropertyModel);
+			unsigned char pDatainPropertyModel[32] = { 0 };
+			memcpy(pDatainPropertyModel, pPropertyModel, iPropertyModelLen);
+			unsigned char pRev[64] = { 0 };
+			MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyModel, iPropertyModelLen, pRev, 64);
+			if (MetaResult != META_SUCCESS)
+			{
+				return MetaResult;
+			}
+			memcpy(g_sMetaComm.strPhoneModel, pRev, 64);
+			UpdateStatusProgress(5, 0.5, 0);
+			if (strncmp(g_sMetaComm.strDetailModel, g_sMetaComm.strPhoneModel, 6) != 0)
+			{
+				UpdateTestItemUIMsg(5, "fail phone model is %s", g_sMetaComm.strPhoneModel);
+				UpdateStatusProgress(5, 1.0, 0);
+				return META_FAILED;
+			}
+
+			UpdateTestItemUIMsg(5, "pass phone model is %s", g_sMetaComm.strPhoneModel);
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check phone model ok");
 		}
-		memcpy(g_sMetaComm.strPhoneModel, pRev, 64);
-		UpdateStatusProgress(5, 0.5, 0);
-		if (strncmp(g_sMetaComm.strDetailModel, g_sMetaComm.strPhoneModel, 6) != 0)
-		{
-			UpdateTestItemUIMsg(5, "fail phone model is %s", g_sMetaComm.strPhoneModel);
-			UpdateStatusProgress(5, 1.0, 0);
-			return META_FAILED;
-		}
-		
-		UpdateTestItemUIMsg(5, "pass phone model is %s", g_sMetaComm.strPhoneModel);
-		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check phone model ok");
 	}
 	UpdateStatusProgress(5, 1.0, 1);
 	g_sMetaComm.lTimeStep5End = GetTickCount();
@@ -325,6 +332,11 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	CString strCCFlagSec;
 	strCCFlagFir.Format("%x", g_sMetaComm.strCCFlag[0]);
 	strCCFlagSec.Format("%x", g_sMetaComm.strCCFlag[1]);
+	if (g_sMetaComm.bDeleteCCSwitch)
+	{
+		strCCFlagFir.Format("%x", 0);
+		strCCFlagSec.Format("%x", 0);
+	}
 	strCCFlag = strCCFlagFir;
 	strCCFlag += strCCFlagSec;
 	char* pCCFlag = strCCFlag.GetBuffer(0);
@@ -346,6 +358,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateProgress(0.85);
 
 	//step 5 write detailmodel to proinfo //55555555555555555555555////////////
+	
 	MetaResult=REQ_WriteDetailModel_WriteAP_PRODINFO_Start();
 	if (MetaResult != META_SUCCESS)
 	{
@@ -355,11 +368,21 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateTestItemTime(6, g_sMetaComm.lTimeStep6End - g_sMetaComm.lTimeStep5End);
 	//end step 5 write detailmodel to proinfo //5555555555555555////////////////
 
-
+	
 	//step 6 upload data to sql server //////6666666666666666666666666666////////////////
 	UpdateStatusProgress(8, 0.3, 0);
 	OleEnvInit();
-	int itmpRet = UploadDataToSql();
+	
+	int itmpRet = 0;
+	if (g_sMetaComm.bDeleteCCSwitch)
+	{
+		itmpRet = UploadDelDataToSql();
+	}
+	else
+	{
+		itmpRet=UploadDataToSql();
+	}
+		
 	if (itmpRet != 0)
 	{
 		UpdateStatusProgress(8, 1.0, 0);
@@ -373,6 +396,25 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	//end step 6 upload data to sql server //////6666666666666666666666666666////////////////
 
 
+	//step delete countrycode factory reset
+	if (g_sMetaComm.bDeleteCCSwitch)
+	{
+		//factory reset
+		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() factory reset start...");
+
+		EMMC_CLEAR_CNF_S emmcCnf;
+		memset(&emmcCnf, 0, sizeof(EMMC_CLEAR_CNF_S));
+		MetaResult = SP_META_ClearValue_r(m_hSPMetaHandle, 20000, &emmcCnf);
+		UpdateUIMsg("emmc clear status=%d", emmcCnf.status);
+		if (MetaResult != META_SUCCESS)
+		{
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() factory reset error");
+			return MetaResult;
+		}
+
+	}
+
+	//end step delete countrycode factory reset
 #if 0
 	//step 7 check factory reset ////7777777777777777777777////////////////
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check factoryreset bFactoryresetCheck=%d", g_sMetaComm.bFactoryresetCheck? 1:0);
@@ -2068,7 +2110,10 @@ META_RESULT SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start()
 	
 	//detailmodel in prodinfo offset 400 (0x190)
 	char pDetailModel[32] = { 0 };
-	memcpy(pDetailModel, g_sMetaComm.strDetailModel, strlen(g_sMetaComm.strDetailModel));
+	if (!g_sMetaComm.bDeleteCCSwitch)
+	{
+		memcpy(pDetailModel, g_sMetaComm.strDetailModel, strlen(g_sMetaComm.strDetailModel));
+	}
 	memcpy(sNVRAM_ReadCnf.buf + 0x190, pDetailModel, 32);
 	//memcpy(sNVRAM_ReadCnf.buf + 0x190, g_sMetaComm.strDetailModel, strlen(g_sMetaComm.strDetailModel));
 	memcpy(pWriteData, sNVRAM_ReadCnf.buf, iWriteBufSize);
@@ -3030,20 +3075,47 @@ META_RESULT SmartPhoneSN::REQ_CountryCode_WriteAP_NVRAM_Start(char *pInData, uns
 	ptmpCCFlag[0] = sNVRAM_ReadCnf.buf[0xa];
 	ptmpCCFlag[1] = sNVRAM_ReadCnf.buf[0xa+1];
 	MTRACE(g_hEBOOT_DEBUG, "tmpCCFlag=%s", ptmpCCFlag);
-	if (ptmpCCFlag[0] != 0)
+	if (g_sMetaComm.bDeleteCCSwitch)
 	{
-		CString strTmpInfo;
-		strTmpInfo.Format(_T("已存在国家码:%s\n 确认覆盖写入吗?"), 
-							ptmpCCFlag);
-		int iResp = AfxMessageBox(strTmpInfo, MB_OKCANCEL | MB_ICONQUESTION);
-		if (iResp == IDOK)
+		if (ptmpCCFlag[0] != 0)
 		{
-			//continue write;
+			CString strTmpInfo;
+			strTmpInfo.Format(_T("已存在国家码:%s\n 确认删除吗?"),
+				ptmpCCFlag);
+			int iResp = AfxMessageBox(strTmpInfo, MB_OKCANCEL | MB_ICONQUESTION);
+			if (iResp == IDOK)
+			{
+				//continue delete;
+			}
+			else
+			{
+				meta_result = META_FAILED;
+				goto Err;
+			}
 		}
-		else 
+		else
 		{
+			AfxMessageBox(_T("设备没有国家码,无需删除"));
 			meta_result = META_FAILED;
 			goto Err;
+		}
+	}
+	else {
+		if (ptmpCCFlag[0] != 0)
+		{
+			CString strTmpInfo;
+			strTmpInfo.Format(_T("已存在国家码:%s\n 确认覆盖写入吗?"),
+				ptmpCCFlag);
+			int iResp = AfxMessageBox(strTmpInfo, MB_OKCANCEL | MB_ICONQUESTION);
+			if (iResp == IDOK)
+			{
+				//continue write;
+			}
+			else
+			{
+				meta_result = META_FAILED;
+				goto Err;
+			}
 		}
 	}
 	//end check countrycode exist ////////

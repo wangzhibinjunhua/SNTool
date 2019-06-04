@@ -315,6 +315,7 @@ typedef struct {
 	bool bPasswordCheck;
 	int iBatmin;
 	int iBatmax;
+	bool bDeleteCCSwitch;
 	//end
 	
 } META_Common_struct;
@@ -512,5 +513,6 @@ extern Login_Identify_e g_LoginIdentify;
 //add by wzb 
 int OleEnvInit();
 int UploadDataToSql();
+int UploadDelDataToSql();
 int SelectSqlByType(int type);
 #endif

@@ -30,8 +30,8 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "国家码工具 V2.2.280519";//
-const char *g_strToolVersionNo = "V2.2.280519";
+const char *g_strToolVersion = "国家码工具 V3.0.280519";//
+const char *g_strToolVersionNo = "V3.0.280519";
 const char *g_strToolWrite = "写国家码工具";
 const char *g_strToolDelete = "删除国家码工具";
 const char *g_strOfflineTest = "Offline Test";
@@ -415,14 +415,22 @@ void CSNWriterDlg::HideSomeUIItem()
 
 	//for show title
 	CString strTitle;
+#if 0
 	if (g_sMetaComm.bOfflineTest)
 	{
 		strTitle.Format(_T("%s    %s    %s"), g_strToolWrite, g_strToolVersionNo,g_strOfflineTest);
+	}
+	else if (g_sMetaComm.bDeleteCCSwitch)
+	{
+		strTitle.Format(_T("%s    %s "), g_strToolDelete, g_strToolVersionNo);
 	}
 	else
 	{
 		strTitle.Format(_T("%s    %s "), g_strToolWrite, g_strToolVersionNo);
 	}
+#endif
+	strTitle.Format(_T("%s    %s    %s"), g_sMetaComm.bDeleteCCSwitch? g_strToolDelete:g_strToolWrite, g_strToolVersionNo, g_sMetaComm.bOfflineTest?g_strOfflineTest:"");
+
 	CFont mFont;
 	mFont.CreatePointFont(400, _T("宋体"));
 	GetDlgItem(IDC_TOOL_CUSTOM_TITLE)->SetWindowText(strTitle);
