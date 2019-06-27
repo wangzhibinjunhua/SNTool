@@ -325,9 +325,19 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	//step 3 check phone detailmodel end //33333333333333333333333333333/////////////////////////////
 	UpdateProgress(0.75);
 
+	//step 5 write detailmodel to proinfo //55555555555555555555555////////////
+	UpdateStatusProgress(6, 0.3, 0);
+	MetaResult = REQ_WriteDetailModel_WriteAP_PRODINFO_Start();
+	if (MetaResult != META_SUCCESS)
+	{
+		return META_FAILED;
+	}
+	
+	//end step 5 write detailmodel to proinfo //5555555555555555////////////////
+
 
 	//step 4 write country code //444444444444444444444444444444444444///////////////
-	UpdateStatusProgress(6, 0.3, 0);
+	
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()write countrycode start");
 	CString strCCFlag;
 	CString strCCFlagFir;
@@ -355,20 +365,12 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	UpdateStatusProgress(6, 1.0, 1);
 	UpdateTestItemUIMsg(6, "pass");
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode ok");
-	
+	g_sMetaComm.lTimeStep6End = GetTickCount();
+	UpdateTestItemTime(6, g_sMetaComm.lTimeStep6End - g_sMetaComm.lTimeStep5End);
 	//step 4 write country code end  //4444444444444444444444444444444444//////////////
 	UpdateProgress(0.85);
 
-	//step 5 write detailmodel to proinfo //55555555555555555555555////////////
 	
-	MetaResult=REQ_WriteDetailModel_WriteAP_PRODINFO_Start();
-	if (MetaResult != META_SUCCESS)
-	{
-		return META_FAILED;
-	}
-	g_sMetaComm.lTimeStep6End = GetTickCount();
-	UpdateTestItemTime(6, g_sMetaComm.lTimeStep6End - g_sMetaComm.lTimeStep5End);
-	//end step 5 write detailmodel to proinfo //5555555555555555////////////////
 
 	
 	//step 6 upload data to sql server //////6666666666666666666666666666////////////////
@@ -2108,6 +2110,64 @@ META_RESULT SmartPhoneSN::REQ_WriteDetailModel_WriteAP_PRODINFO_Start()
 		goto Err;
 	}
 
+#if 1
+	//check countrycode exist ////////
+	char ptmpMccf[32] = { 0 };
+	char ptmpCCFlag[3] = { 0 };
+	//ptmpCCFlag[0] = sNVRAM_ReadCnf.buf[0xa];
+	//ptmpCCFlag[1] = sNVRAM_ReadCnf.buf[0xa + 1];
+	memcpy(ptmpMccf,sNVRAM_ReadCnf.buf + 0x190, 32);
+	MTRACE(g_hEBOOT_DEBUG, "ptmpMccf=%s", ptmpMccf);
+	if (g_sMetaComm.bDeleteCCSwitch)
+	{
+		if (strlen(ptmpMccf)>2)
+		{
+			ptmpCCFlag[1] = ptmpMccf[strlen(ptmpMccf) - 1];
+			ptmpCCFlag[0] = ptmpMccf[strlen(ptmpMccf) - 2];
+			CString strTmpInfo;
+			strTmpInfo.Format(_T("已存在国家码:%s\n 确认删除吗?"),
+				ptmpCCFlag);
+			int iResp = AfxMessageBox(strTmpInfo, MB_OKCANCEL | MB_ICONQUESTION);
+			if (iResp == IDOK)
+			{
+				//continue delete;
+			}
+			else
+			{
+				meta_result = META_FAILED;
+				goto Err;
+			}
+		}
+		else
+		{
+			AfxMessageBox(_T("设备没有国家码,无需删除"));
+			meta_result = META_FAILED;
+			goto Err;
+		}
+	}
+	else {
+		if (strlen(ptmpMccf)>2)
+		{
+			ptmpCCFlag[1] = ptmpMccf[strlen(ptmpMccf) - 1];
+			ptmpCCFlag[0] = ptmpMccf[strlen(ptmpMccf) - 2];
+			CString strTmpInfo;
+			strTmpInfo.Format(_T("已存在国家码:%s\n 确认覆盖写入吗?"),
+				ptmpCCFlag);
+			int iResp = AfxMessageBox(strTmpInfo, MB_OKCANCEL | MB_ICONQUESTION);
+			if (iResp == IDOK)
+			{
+				//continue write;
+			}
+			else
+			{
+				meta_result = META_FAILED;
+				goto Err;
+			}
+		}
+	}
+	//end check countrycode exist ////////
+#endif
+
 	MTRACE(g_hEBOOT_DEBUG, "memcpy detailmodel to Prod_Info nvram data start...");
 	
 	//detailmodel in prodinfo offset 400 (0x190)
@@ -3072,6 +3132,8 @@ META_RESULT SmartPhoneSN::REQ_CountryCode_WriteAP_NVRAM_Start(char *pInData, uns
         goto Err;
     }
 
+
+#if 0
 	//check countrycode exist ////////
 	char ptmpCCFlag[3] = { 0 };
 	ptmpCCFlag[0] = sNVRAM_ReadCnf.buf[0xa];
@@ -3121,6 +3183,7 @@ META_RESULT SmartPhoneSN::REQ_CountryCode_WriteAP_NVRAM_Start(char *pInData, uns
 		}
 	}
 	//end check countrycode exist ////////
+#endif
    
     MTRACE (g_hEBOOT_DEBUG, "SNBase::ConductCountryCodeData(): Start Conduct wifi nvram data...!");
     pFuncName = "SNBase::ConductCountryCodeData()";
