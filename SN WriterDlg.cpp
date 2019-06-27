@@ -30,13 +30,13 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "国家码工具 V3.0.280519";//
-const char *g_strToolVersionNo = "V3.0.280519";
+const char *g_strToolVersion = "国家码工具 V3.1.270619";//
+const char *g_strToolVersionNo = "V3.1.270619";
 const char *g_strToolWrite = "写国家码工具";
 const char *g_strToolDelete = "删除国家码工具";
 const char *g_strOfflineTest = "Offline Test";
 //add by wzb
-int iDateLimit = 190729;//版本号和限制时间同步修改
+int iDateLimit = 190828;//版本号和限制时间同步修改
 //end
 
 extern CSNWriterDlg *g_pMainDlg;
