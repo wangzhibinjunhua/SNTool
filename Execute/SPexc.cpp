@@ -168,6 +168,7 @@ META_RESULT SmartPhoneSN::CheckCPUInfo()
 	}
 #endif
 	//check cpu mt6761
+#if 1
 	char *pPropertyCpu = "ro.hardware";
 	int iPropertyCpuLen = strlen(pPropertyCpu);
 	unsigned char pDatainPropertyCpu[32] = { 0 };
@@ -188,6 +189,7 @@ META_RESULT SmartPhoneSN::CheckCPUInfo()
 		AfxMessageBox(_T("Î´Öª´íÎó\r\n ´íÎó´úÂë:0x0x100017"));
 		return META_FAILED;
 	}
+#endif
 	return META_SUCCESS;
 
 }
@@ -250,17 +252,17 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 		if (g_sMetaComm.bBatteryCheck)
 		{
 			int battery_level = 0;
-			MetaResult = SP_META_ADC_GetBatCapacity_r(m_hSPMetaHandle, 8000, &battery_level);
+			MetaResult = SP_META_ADC_GetBatVol_r(m_hSPMetaHandle, 8000, &battery_level);
 			if (MetaResult != META_SUCCESS)
 			{
 				UpdateTestItemUIMsg(5, "fail, check battery fail ");
 				UpdateStatusProgress(5, 1.0, 0);
 				return MetaResult;
 			}
-			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery level=%d", battery_level);
+			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery voltage=%d", battery_level);
 			if (battery_level > g_sMetaComm.iBatmax || battery_level < g_sMetaComm.iBatmin)
 			{
-				UpdateTestItemUIMsg(5, "fail, battery level=%d", battery_level);
+				UpdateTestItemUIMsg(5, "fail, battery voltage=%d", battery_level);
 				UpdateStatusProgress(5, 1.0, 0);
 				return META_FAILED;
 			}
