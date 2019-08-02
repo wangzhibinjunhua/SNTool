@@ -49,6 +49,10 @@ CSystemConfig::CSystemConfig(CWnd* pParent /*=NULL*/)
     m_bMDDBFromDUT = FALSE;
     //}}AFX_DATA_INIT
     m_pToolTip = NULL;
+
+	m_strCheckBat = _T("检测电池电量");
+	m_strCheckFactory = _T("检测恢复出厂设置");
+	m_strCheckModel = _T("检测详细机型");
 }
 
 
@@ -132,6 +136,10 @@ void CSystemConfig::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_BTN_LOG, m_LogDir_BTN);
     DDX_Control(pDX, IDC_BTN_SAVE, m_SaveBTN);
 	DDX_Control(pDX, IDC_BTN_CHANGEPW, m_ChangePWBTN);//add by wzb
+
+	DDX_Text(pDX, IDC_CHECK_BATTERY, m_strCheckBat);
+	DDX_Text(pDX, IDC_CHECK_FACTORYRESET, m_strCheckFactory);
+	DDX_Text(pDX, IDC_CHECK_MODELDETAILS, m_strCheckModel);
 }
 
 

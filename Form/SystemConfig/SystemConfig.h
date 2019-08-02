@@ -31,6 +31,9 @@ public:
     BOOL    m_bWriteMeid;
     BOOL    m_bWriteEsn;
     //************C2K PARA END************//
+	CString m_strCheckBat;
+	CString m_strCheckFactory;
+	CString m_strCheckModel;
 
     CString m_strLogDir;
     CString	m_strWifiHD;

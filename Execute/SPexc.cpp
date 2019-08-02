@@ -227,7 +227,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 			MetaResult = MetaCustFunc(META_CUST_FUNC_TYPE_GET_PROPERTY, pDatainPropertyReset, iPropertyResetLen, pRev, 64);
 			if (MetaResult != META_SUCCESS)
 			{
-				UpdateTestItemUIMsg(5, "fail, phone has not been factory reset ");
+				UpdateTestItemUIMsg(5, "错误, 设备没有恢复出厂设置 ");
 				UpdateStatusProgress(5, 1.0, 0);
 				return MetaResult;
 			}
@@ -236,7 +236,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 			{
 
 				MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() not factory reset reject");
-				UpdateTestItemUIMsg(5, "fail ,phone has not been factory reset ");
+				UpdateTestItemUIMsg(5, "错误 ,设备没有恢复出厂设置 ");
 				UpdateStatusProgress(5, 1.0, 0);
 				return META_FAILED;
 			}
@@ -255,14 +255,14 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 			MetaResult = SP_META_ADC_GetBatVol_r(m_hSPMetaHandle, 8000, &battery_level);
 			if (MetaResult != META_SUCCESS)
 			{
-				UpdateTestItemUIMsg(5, "fail, check battery fail ");
+				UpdateTestItemUIMsg(5, "错误, 检查电量不符 ");
 				UpdateStatusProgress(5, 1.0, 0);
 				return MetaResult;
 			}
 			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery voltage=%d", battery_level);
 			if (battery_level > g_sMetaComm.iBatmax || battery_level < g_sMetaComm.iBatmin)
 			{
-				UpdateTestItemUIMsg(5, "fail, battery voltage=%d", battery_level);
+				UpdateTestItemUIMsg(5, "错误, 电池电压=%d", battery_level);
 				UpdateStatusProgress(5, 1.0, 0);
 				return META_FAILED;
 			}
@@ -277,12 +277,12 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	if (MetaResult != META_SUCCESS)
 	{
 		UpdateStatusProgress(4,1.0,0);
-		UpdateTestItemUIMsg(4, "fail,phone SN is %s", g_sMetaComm.strPhoneSN);
+		UpdateTestItemUIMsg(4, "错误, 设备SN 是 %s", g_sMetaComm.strPhoneSN);
 		MTRACE (g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check SN FAIL!");
 		return MetaResult;
 	}
 	UpdateStatusProgress(4, 1.0, 1);
-	UpdateTestItemUIMsg(4, "pass,phone SN is %s", g_sMetaComm.strPhoneSN);
+	UpdateTestItemUIMsg(4, "通过,设备 SN 是 %s", g_sMetaComm.strPhoneSN);
 	UpdateProgress(0.5);
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check SN OK!");
 	g_sMetaComm.lTimeStep4End = GetTickCount();
@@ -310,12 +310,12 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 			UpdateStatusProgress(5, 0.5, 0);
 			if (strncmp(g_sMetaComm.strDetailModel, g_sMetaComm.strPhoneModel, 6) != 0)
 			{
-				UpdateTestItemUIMsg(5, "fail phone model is %s", g_sMetaComm.strPhoneModel);
+				UpdateTestItemUIMsg(5, "错误, 设备型号是 %s", g_sMetaComm.strPhoneModel);
 				UpdateStatusProgress(5, 1.0, 0);
 				return META_FAILED;
 			}
 
-			UpdateTestItemUIMsg(5, "pass phone model is %s", g_sMetaComm.strPhoneModel);
+			UpdateTestItemUIMsg(5, "通过, 设备型号是 %s", g_sMetaComm.strPhoneModel);
 			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode()check phone model ok");
 		}
 	}
@@ -358,12 +358,12 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	if (MetaResult != META_SUCCESS)
 	{
 		UpdateStatusProgress(6, 1.0, 0);
-		UpdateTestItemUIMsg(6, "fail");
+		UpdateTestItemUIMsg(6, "错误");
 		MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode fail");
 		return META_FAILED;
 	}
 	UpdateStatusProgress(6, 1.0, 1);
-	UpdateTestItemUIMsg(6, "pass");
+	UpdateTestItemUIMsg(6, "通过");
 	MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() write countrycode ok");
 	g_sMetaComm.lTimeStep6End = GetTickCount();
 	UpdateTestItemTime(6, g_sMetaComm.lTimeStep6End - g_sMetaComm.lTimeStep5End);
@@ -390,11 +390,11 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 	if (itmpRet != 0)
 	{
 		UpdateStatusProgress(8, 1.0, 0);
-		UpdateTestItemUIMsg(8, "fail");
+		UpdateTestItemUIMsg(8, "错误");
 		return META_FAILED;
 	}
 	UpdateStatusProgress(8, 1.0, 1);
-	UpdateTestItemUIMsg(8, "pass");
+	UpdateTestItemUIMsg(8, "通过");
 	g_sMetaComm.lTimeStep7End = GetTickCount();
 	UpdateTestItemTime(8, g_sMetaComm.lTimeStep7End - g_sMetaComm.lTimeStep6End);
 	//end step 6 upload data to sql server //////6666666666666666666666666666////////////////
@@ -409,7 +409,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 		EMMC_CLEAR_CNF_S emmcCnf;
 		memset(&emmcCnf, 0, sizeof(EMMC_CLEAR_CNF_S));
 		MetaResult = SP_META_ClearValue_r(m_hSPMetaHandle, 20000, &emmcCnf);
-		UpdateUIMsg("emmc clear status=%d", emmcCnf.status);
+		UpdateUIMsg("EMMC 擦除状态=%d", emmcCnf.status);
 		if (MetaResult != META_SUCCESS)
 		{
 			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() factory reset error");

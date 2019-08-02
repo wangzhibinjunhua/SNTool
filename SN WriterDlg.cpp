@@ -30,8 +30,8 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "国家码工具 V4.0.240719";//
-const char *g_strToolVersionNo = "V4.0.240719";
+const char *g_strToolVersion = "国家码工具 V4.1.240719";//
+const char *g_strToolVersionNo = "V4.1.240719";
 const char *g_strToolWrite = "写国家码工具";
 const char *g_strToolDelete = "删除国家码工具";
 const char *g_strOfflineTest = "Offline Test";
@@ -66,6 +66,8 @@ CSNWriterDlg::CSNWriterDlg(CWnd* pParent /*=NULL*/)
 	m_strTestItemStatus = _T("状态");
 	m_strTestOKPercent= _T("成功率");
 	m_strTestOKTime= _T("平均耗时");
+	m_strSystemSetting = _T("设置");
+	m_strSystemQuit = _T("退出");
     //}}AFX_DATA_INIT
     // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -114,6 +116,9 @@ void CSNWriterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_BTN_START, m_StartBTN);
     DDX_Control(pDX, IDC_BTN_QUIT, m_QuitBTN);
     DDX_Control(pDX, IDC_BTN_SYSCONFIG, m_SystemCfgBTN);
+
+	DDX_Text(pDX, IDC_BTN_SYSCONFIG, m_strSystemSetting);
+	DDX_Text(pDX, IDC_BTN_QUIT, m_strSystemQuit);
 }
 
 BEGIN_MESSAGE_MAP(CSNWriterDlg, CDialog)
