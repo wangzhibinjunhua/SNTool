@@ -35,6 +35,9 @@ public:
 	CString m_strCheckFactory;
 	CString m_strCheckModel;
 
+	CString m_strBtnSave;
+	CString m_strLogDirName;
+
     CString m_strLogDir;
     CString	m_strWifiHD;
     CString	m_strMD_2_DBPath;

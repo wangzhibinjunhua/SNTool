@@ -108,6 +108,7 @@ BEGIN_MESSAGE_MAP(CScanData, CDialog)
 	ON_EN_KILLFOCUS(IDC_MEID_DATA, OnKillfocusMeidData)
 	ON_EN_KILLFOCUS(IDC_ESN_DATA, OnKillfocusEsnData)
 	//}}AFX_MSG_MAP
+	ON_EN_CHANGE(IDC_BARCODE_DATA, &CScanData::OnEnChangeBarcodeData)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1445,4 +1446,21 @@ void CScanData::OnShowWindow(BOOL bShow, UINT nStatus)
 	CDialog::OnShowWindow(bShow, nStatus);
 	
 	// TODO: Add your message handler code here
+}
+
+
+void CScanData::OnEnChangeBarcodeData()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	CString str;
+	GetDlgItemText(IDC_BARCODE_DATA, str);
+	int len = str.GetLength();
+	if (len >= 16) {
+		OnBtnScanOk();
+	}
 }

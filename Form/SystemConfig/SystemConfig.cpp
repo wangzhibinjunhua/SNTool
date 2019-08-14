@@ -53,6 +53,9 @@ CSystemConfig::CSystemConfig(CWnd* pParent /*=NULL*/)
 	m_strCheckBat = _T("检测电池电量");
 	m_strCheckFactory = _T("检测恢复出厂设置");
 	m_strCheckModel = _T("检测详细机型");
+
+	m_strBtnSave = _T("保存");
+	m_strLogDirName = _T("日志存储路径");
 }
 
 
@@ -61,6 +64,8 @@ void CSystemConfig::DoDataExchange(CDataExchange* pDX)
     CDialog::DoDataExchange(pDX);
     //{{AFX_DATA_MAP(CSystemConfig)
     //*************C2K***************
+	DDX_Text(pDX, IDC_LOG_DIR_title, m_strLogDirName);
+	DDX_Text(pDX, IDC_BTN_SAVE, m_strBtnSave);
     DDX_Text(pDX, IDC_MEID_HEADER_STR, m_strMeidHD);
     DDV_MaxChars(pDX, m_strMeidHD, 8);
     DDX_Text(pDX, IDC_ESN_HEADER_STR, m_strEsnHD);

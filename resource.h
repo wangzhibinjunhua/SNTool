@@ -102,7 +102,6 @@
 #define IDC_SERIAL_NO_HEADER_SCAN       1080
 #define IDC_BTN_SAVE                    1081
 #define IDC_SN_VERSION                  1082
-#define IDC_BTN_CHANGEPW                2082
 #define IDC_METACOREDLL_VERSION         1083
 #define IDC_METAAPPDLL_VERSION          1084
 #define IDC_EDIT_VERIFY_PASSWD          1085
@@ -182,6 +181,12 @@
 #define IDC_BTN_LOG                     1163
 #define IDC_LOCK_OTP                    1164
 #define IDC_IMAGE1                      1169
+#define IDC_STATIC_comport              1170
+#define IDC_STATIC_type                 1171
+#define IDC_STATIC_total                1172
+#define IDC_STATIC_fail                 1173
+#define IDC_LOG_DIR_title               1174
+#define IDC_BTN_CHANGEPW                2082
 #define IDC_TV_TESTITEM                 10091
 #define IDC_PROGRESS_STATUS1            10092
 #define IDC_TV_TESTITEM1                10101
@@ -259,6 +264,7 @@
 #define IDR_OPTION_ATTESTATION          32798
 #define IDC_ATTESTATION_KEY_FIEL        32799
 #define IDC_BTN_SEL_ATTESTATION_KEY     32800
+#define IDC_LOG_DIR_NAME                32899
 
 // Next default values for new objects
 // 
@@ -266,7 +272,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        166
 #define _APS_NEXT_COMMAND_VALUE         32801
-#define _APS_NEXT_CONTROL_VALUE         1170
+#define _APS_NEXT_CONTROL_VALUE         1175
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

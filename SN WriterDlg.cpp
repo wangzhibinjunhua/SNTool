@@ -30,13 +30,13 @@ static char THIS_FILE[] = __FILE__;
 unsigned short g_iTotalComPort = MAX_COMPORT_COUNT;
 unsigned short g_iComportArray[MAX_COMPORT_COUNT] = {0};
 
-const char *g_strToolVersion = "国家码工具 V4.1.240719";//
-const char *g_strToolVersionNo = "V4.1.240719";
+const char *g_strToolVersion = "国家码工具 V4.3.140819";//
+const char *g_strToolVersionNo = "V4.3.140819";
 const char *g_strToolWrite = "写国家码工具";
 const char *g_strToolDelete = "删除国家码工具";
-const char *g_strOfflineTest = "Offline Test";
+const char *g_strOfflineTest = "离线测试版";
 //add by wzb
-int iDateLimit = 190924;//版本号和限制时间同步修改
+int iDateLimit = 191014;//版本号和限制时间同步修改
 //end
 
 extern CSNWriterDlg *g_pMainDlg;
@@ -68,6 +68,12 @@ CSNWriterDlg::CSNWriterDlg(CWnd* pParent /*=NULL*/)
 	m_strTestOKTime= _T("平均耗时");
 	m_strSystemSetting = _T("设置");
 	m_strSystemQuit = _T("退出");
+
+	m_strStatic1 = _T("端口");
+	m_strStatic2 = _T("类型");
+	m_strStatic3 = _T("总数");
+	m_strStaticPass4 = _T("成功");
+	m_strStatic5 = _T("失败");
     //}}AFX_DATA_INIT
     // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -84,6 +90,12 @@ void CSNWriterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_COUNT_TOTAL, m_strTotal);
     DDX_Text(pDX, IDC_COUNT_PASS, m_strPass);
     DDX_Text(pDX, IDC_COUNT_FAIL, m_strFail);
+	DDX_Text(pDX, IDC_STATIC_comport, m_strStatic1);
+	DDX_Text(pDX, IDC_STATIC_type, m_strStatic2);
+	DDX_Text(pDX, IDC_STATIC_total, m_strStatic3);
+	DDX_Text(pDX, IDC_STATIC_PASS, m_strStaticPass4);
+	DDX_Text(pDX, IDC_STATIC_fail, m_strStatic5);
+	
 	
     //}}AFX_DATA_MAP
 

@@ -132,6 +132,8 @@ protected:
     bool CheckScanData(const char *pStrHeader, bool bCheckHeader, const char *pInData, E_ScanData_Type dataType);
     bool CheckScanDataByIndex(int index);
     int  GetNextScanID(const int currentID);
+public:
+	afx_msg void OnEnChangeBarcodeData();
 };
 
 //{{AFX_INSERT_LOCATION}}

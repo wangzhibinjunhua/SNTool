@@ -33,6 +33,12 @@ public:
 	CString	m_strPass;
 	CString	m_strFail;
 	CString m_MainUIT1;
+
+	CString m_strStatic1;
+	CString m_strStatic2;
+	CString m_strStatic3;
+	CString m_strStaticPass4;
+	CString m_strStatic5;
 	//}}AFX_DATA
 
 	//add by wzb
