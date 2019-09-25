@@ -94,11 +94,11 @@ BOOL CSNWriterApp::InitInstance()
 	CString strDate = mTime.Format("%y%m%d");
 	int iDate = _ttoi(strDate);
 	
-	if (iDate > iDateLimit)
-	{
-		::AfxMessageBox(_T("版本太低,请更新软件\r\n 错误代码0x100010"), MB_ICONERROR);
-		return FALSE;
-	}
+	//if (iDate > iDateLimit)
+	//{
+	//	::AfxMessageBox(_T("版本太低,请更新软件\r\n 错误代码0x100010"), MB_ICONERROR);
+	//	return FALSE;
+	//}
 	//end
 
     CSNWriterDlg dlg;
