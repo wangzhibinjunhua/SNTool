@@ -689,6 +689,11 @@ BOOL CSNWriterDlg::PreTranslateMessage(MSG* pMsg)
     {
         return TRUE;
     }
+	//add by wzb for enter
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
+		return TRUE;
+	}
+	//end
     return CDialog::PreTranslateMessage(pMsg);
 }
 
