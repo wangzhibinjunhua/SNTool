@@ -252,7 +252,8 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 		if (g_sMetaComm.bBatteryCheck)
 		{
 			int battery_level = 0;
-			MetaResult = SP_META_ADC_GetBatVol_r(m_hSPMetaHandle, 8000, &battery_level);
+			//MetaResult = SP_META_ADC_GetBatVol_r(m_hSPMetaHandle, 8000, &battery_level);
+			MetaResult = SP_META_ADC_GetBatCapacity_r(m_hSPMetaHandle, 8000, &battery_level);
 			if (MetaResult != META_SUCCESS)
 			{
 				UpdateTestItemUIMsg(5, "错误, 检查电量不符 ");
@@ -262,7 +263,7 @@ META_RESULT SmartPhoneSN::WriteCountryCode()
 			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN::WriteCountryCode() check battery voltage=%d", battery_level);
 			if (battery_level > g_sMetaComm.iBatmax || battery_level < g_sMetaComm.iBatmin)
 			{
-				UpdateTestItemUIMsg(5, "错误, 电池电压=%d", battery_level);
+				UpdateTestItemUIMsg(5, "错误, 电池电量=%d", battery_level);
 				UpdateStatusProgress(5, 1.0, 0);
 				return META_FAILED;
 			}
