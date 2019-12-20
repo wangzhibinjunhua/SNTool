@@ -2000,7 +2000,11 @@ META_RESULT SmartPhoneSN::ReadSN_From_PRODINFO()
 		memcpy(pReadData, sNVRAM_ReadCnf.buf, 64);
 		(this->*pDataFunc)(tmpReadData, 1, pReadData, 64);
 
-		if (strncmp(m_sScanData.strBarcode, tmpReadData, strlen(tmpReadData)) != 0){
+		if (strncmp(m_sScanData.strBarcode, tmpReadData, 16/*strlen(tmpReadData)*/) != 0){
+			for (int i = 0; i < 64; i++) {
+				MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: ScanSN hex[%d][%x]", i,tmpReadData[i]);
+			}
+			
 			MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: ScanSN[%s]", m_sScanData.strBarcode);
             MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: ReadSN[%s]", tmpReadData);
             MTRACE(g_hEBOOT_DEBUG, "SmartPhoneSN: Check SN data FAIL!!");
